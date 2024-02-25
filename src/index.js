@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const path = require('path'); 
 
 require('dotenv').config();
 
@@ -13,6 +14,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use('/', routes);
 app.use(express.json());
+
+const publicPath = path.resolve(__dirname, '..', 'public');
+app.use(express.static(publicPath));
 
 dbConnection();
 
