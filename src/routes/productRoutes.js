@@ -19,7 +19,7 @@ router.get("/products", async(req, res) => {
 
 //Devuelve el detalle de un producto buscado por id
 
-router.put("/products/:productId", async(req, res) => {
+router.get("/products/:productId", async(req, res) => {
     try {
         const product = await Product.findById(req.params.productId);
         if (!product) {
