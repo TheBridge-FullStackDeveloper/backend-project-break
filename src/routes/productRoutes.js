@@ -1,6 +1,54 @@
 const express = require("express");
 const router = express.Router();
-const Product = require('../models/Product'); 
+const Product = require('../models/Product');
+
+
+// Devuelve todos los productos
+
+router.get("/products", async(req, res) => {
+    try{
+        const products = await Product.find()
+        res.json(products)
+    } catch (error) {
+        console.error(error);
+        res.
+            status(500).
+            send({ message: 'Servidor no disponible' });
+    }
+});
+
+//Devuelve el detalle de un producto buscado por id
+
+router.put("/products/:productId", async(req, res) => {
+    try {
+        const product = await Product.findById(req.params.productId);
+        if (!product) {
+            return res.status(404).json({ mensaje: 'No se ha podido encontrar el producto solicitado' });
+        }
+        res.json(product)
+    } catch (error) {
+        res
+            .status(500)
+            .json({ message: 'Servidor no disponible' });
+    }
+});
+
+//Devuelve el dashboard del administrador. Aparecerán todos los artículos que se hayan subido.
+
+router.get("/dashboard", async(req, res) => {
+    try{
+        const products = await Product.find()
+        res.json(products)
+    } catch (error) {
+        console.error(error);
+        res.
+            status(500).
+            send({ message: 'Servidor no disponible' });
+    }
+});
+
+//Devuelve el formulario para subir un artículo nuevo. (No disponible a falta de front)
+
 
 //Crear un nuevo producto
 router.post("/dashboard", async(req, res) => {
