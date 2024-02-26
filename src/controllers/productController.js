@@ -252,7 +252,7 @@ getProductCards = (products, url) => {
                 <div id="product-card" class="product-card">
                     <img src="${product.imagen}" alt="${product.nombre}">
                     <h2>${product.nombre}</h2>
-                    <a class="detail" href="/dashboard/${product._id}">Ver</a>
+                    <a class="detail" href="/products/${product._id}">Ver</a>
                 </div>
             `;
         }

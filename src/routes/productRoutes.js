@@ -8,6 +8,7 @@ router.get('/', controller.showProducts);
 router.get('/products', controller.showProducts);
 
 //Devolver el detalle de un producto
+router.get('/products/:productId', controller.showProductById);
 router.get('/dashboard/:productId', controller.showProductById);
 
 //Devuelve el dashboard del administrador con todos los productos
