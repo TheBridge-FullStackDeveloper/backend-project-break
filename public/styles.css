@@ -63,8 +63,47 @@ h1 {
 .product-container {
     width: 80%;
     display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
     justify-content: space-evenly;
     margin: 0 auto;
+}
+
+.product-container form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 24px;
+    padding: 72px 24px 24px 24px;
+    border-radius: 8px;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+}
+
+.product-container form input {
+    width: 80%;
+    padding: 8px;
+    border-radius: 4px;
+    border: none;
+    background: #eaeaea;
+}
+
+.product-container form .update {
+    background: #62e06f;
+    padding: 8px 16px;
+    width: 32%;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 16px;
+}
+
+.product-container form .update:hover {
+    background: #4ca255;
 }
 
 .product-card {
@@ -92,7 +131,6 @@ h1 {
 }
 
 .product-card a {
-    background: #62e06f;
     padding: 8px 16px;
     width: 80%;
     text-align: center;
@@ -103,6 +141,34 @@ h1 {
     margin-top: 16px;
 }
 
-.product-card a:hover {
+.product-card .detail {
+    background: #62b6e0;
+}
+
+.product-card .detail:hover {
+    background: #4c97bd;
+}
+
+.product-card .edit {
+    background: #62e06f;
+}
+
+.product-card .edit:hover {
     background: #4ca255;
+}
+
+.product-card .delete {
+    background: #e06262;
+}
+
+.product-card .delete:hover {
+    background: #b94b4b;
+}
+
+.product-card .home {
+    background: #dde062;
+}
+
+.product-card .home:hover {
+    background: #bdbf4f;
 }
