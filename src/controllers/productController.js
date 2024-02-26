@@ -4,7 +4,7 @@ const Product = require('../models/Product');
 exports.showProducts = async (req, res) => {
     try {
         const products = await Product.find({});
-        const html = getProductCards(products);
+        let html = getProductCards(products, req.url);
         res.setHeader('Content-Type', 'text/html');
         res.send(html);
     } catch (err) {
@@ -15,36 +15,54 @@ exports.showProducts = async (req, res) => {
 //Devolver el detalle de un producto
 exports.showProductById = async (req, res) => {
     try {
-        const product = await Product.findById(req.params.productId); // Usar `findById` para buscar por ID
+        const product = await Product.findById(req.params.productId);
         if (!product) {
             return res.status(404).send('Producto no encontrado');
         }
         
         let html = `
-            <html>
-                <head>
-                    <title>Productos</title>
-                    <link rel="stylesheet" type="text/css" href="/styles.css">
-                </head>
-                <body>
-            `;
+                <html>
+                    <head>
+                        <title>Productos</title>
+                        <link rel="stylesheet" type="text/css" href="/styles.css">
+                    </head>
+                    <body>
+                `;
         html += '<h1>Detalle de producto</h1>';
         html += '<div class="product-container">'; 
-        html += `
-            <div class="product-card">
-                <img src="${product.imagen}" alt="${product.nombre}">
-                <h2>${product.nombre}</h2>
-                <p>${product.descripcion}</p>
-                <p>${product.categoria}</p>
-                <p>${product.talla}</p>
-                <p>${product.precio}€</p>
-                <p>ID: ${product._id}</p>
-                <a href="/products/${product._id}">Ver detalle</a>
-            </div>
-        `;
+
+        if (req.url == '/dashboard') {
+            
+            html += `
+                <div class="product-card">
+                    <img src="${product.imagen}" alt="${product.nombre}">
+                    <h2>${product.nombre}</h2>
+                    <p>${product.descripcion}</p>
+                    <p><b>Categoría: </b>${product.categoria}</p>
+                    <p><b>Talla: </b>${product.talla}</p>
+                    <p><b>Precio: </b>${product.precio}€</p>
+                </div>
+            `;
+            
+        } else {
+            
+            html += `
+                <div class="product-card">
+                    <img src="${product.imagen}" alt="${product.nombre}">
+                    <h2>${product.nombre}</h2>
+                    <p>${product.descripcion}</p>
+                    <p><b>Categoría: </b>${product.categoria}</p>
+                    <p><b>Talla: </b>${product.talla}</p>
+                    <p><b>Precio: </b>${product.precio}€</p>
+                    <a class="edit" href="/dashboard/${product._id}/edit">Modificar</a>
+                    <a class="delete" href="/dashboard/${product._id}/delete">Eliminar</a>
+                </div>
+            `;
+            
+        }
+
         html += '</div>'; 
         html += '</body></html>';
-
         res.setHeader('Content-Type', 'text/html');
         res.send(html);
     } catch (err) {
@@ -52,8 +70,111 @@ exports.showProductById = async (req, res) => {
     }
 }
 
+//Actualizar un producto
+exports.updateProduct = async (req, res) => {
+    try {
+        const updatedProduct = await Product.findByIdAndUpdate(req.params.productId, req.body, { new: true });
+
+        // Redirige a alguna ruta después de la actualización, por ejemplo, el dashboard
+        res.redirect('/dashboard');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error interno del servidor');
+    }
+};
+
+//Mostrar formulario de actualización producto
+exports.showEditProduct = (req, res) => {
+    try {
+        const productId = req.params.productId;
+        console.log(productId)
+        if (!productId) {
+            return res.status(404).send('Producto no encontrado');
+        }
+        
+        let html = `
+                <html>
+                    <head>
+                        <title>Productos</title>
+                        <link rel="stylesheet" type="text/css" href="/styles.css">
+                    </head>
+                    <body>
+                `;
+        html += '<h1>Editar producto</h1>';
+        html += '<div class="product-container">'; 
+
+        html += `
+            <form action="/dashboard/${productId}" method="POST">
+                <input type="hidden" name="productId" value="<%= productId %>">
+                <input type="text" id="productName" name="productName" placeholder="Nombre">
+                <br><br>
+                <input type="text" id="productDescription" name="productDescription" placeholder="Descripción">
+                <br><br>
+                <input type="text" id="productCategory" name="productCategory" placeholder="Categoría">
+                <br><br>
+                <input type="text" id="productSize" name="productSize" placeholder="Talla">
+                <br><br>
+                <input type="text" id="productPrice" name="productPrice" placeholder="Precio">
+                <br><br>
+                <button class="update" type="submit">Actualizar</button>
+            </form>
+        `;
+            
+        html += '</div>'; 
+        html += '</body></html>';
+        res.setHeader('Content-Type', 'text/html');
+        res.send(html);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error interno del servidor');
+    }
+};
+
+//Eliminar un producto
+exports.deleteProduct = async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.productId);
+        const idProduct = await req.params.productId;
+        await Product.findByIdAndDelete(idProduct);
+        if (!product) {
+            return res.status(404).send('Producto no encontrado');
+        }
+
+        let html = `
+                <html>
+                    <head>
+                        <title>Productos</title>
+                        <link rel="stylesheet" type="text/css" href="/styles.css">
+                    </head>
+                    <body>
+                `;
+        html += '<h1>Producto eliminado</h1>';
+        html += '<div class="product-container">'; 
+ 
+        html += `
+            <div class="product-card">
+                <img src="${product.imagen}" alt="${product.nombre}">
+                <h2>${product.nombre}</h2>
+                <p>${product.descripcion}</p>
+                <p><b>Categoría: </b>${product.categoria}</p>
+                <p><b>Talla: </b>${product.talla}</p>
+                <p><b>Precio: </b>${product.precio}€</p>
+                <a class="home" href="/">Inicio</a>
+            </div>
+        `;
+
+        html += '</div>'; 
+        html += '</body></html>';
+        res.setHeader('Content-Type', 'text/html');
+        res.send(html);
+        
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error interno del servidor');
+    }
+}
 //Genera el html de los productos. Recibe un array de productos y devuelve el html de las tarjetas de los productos
-getProductCards = (products) => {
+getProductCards = (products, url) => {
     let html = `
         <html>
             <head>
@@ -64,20 +185,31 @@ getProductCards = (products) => {
         `;
     html += '<h1>Lista de Productos</h1>';
     html += '<div class="product-container">'; 
-    for (let product of products) {
-        html += `
-            <div class="product-card">
-                <img src="${product.imagen}" alt="${product.nombre}">
-                <h2>${product.nombre}</h2>
-                <p>${product.descripcion}</p>
-                <p>${product.categoria}</p>
-                <p>${product.talla}</p>
-                <p>${product.precio}€</p>
-                <p>ID: ${product._id}</p>
-                <a href="/products/${product._id}">Ver detalle</a>
-            </div>
-        `;
+
+    if (url == '/dashboard') {
+        for (let product of products) {
+            html += `
+                <div id="product-card" class="product-card">
+                    <img src="${product.imagen}" alt="${product.nombre}">
+                    <h2>${product.nombre}</h2>
+                    <a class="detail" href="/dashboard/${product._id}">Ver</a>
+                    <a class="edit" href="/dashboard/${product._id}/edit">Modificar</a>
+                    <a class="delete" href="/dashboard/${product._id}/delete">Eliminar</a>
+                </div>
+            `;
+        }
+    } else {
+        for (let product of products) {
+            html += `
+                <div id="product-card" class="product-card">
+                    <img src="${product.imagen}" alt="${product.nombre}">
+                    <h2>${product.nombre}</h2>
+                    <a class="detail" href="/dashboard/${product._id}">Ver</a>
+                </div>
+            `;
+        }
     }
+    
     html += '</div>'; 
     html += '</body></html>';
     return html;
