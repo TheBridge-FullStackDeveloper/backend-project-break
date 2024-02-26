@@ -15,6 +15,7 @@ exports.showProducts = async (req, res) => {
 //Devolver el detalle de un producto
 exports.showProductById = async (req, res) => {
     try {
+        const navBarHTML = getNavBar();
         const product = await Product.findById(req.params.productId);
         if (!product) {
             return res.status(404).send('Producto no encontrado');
@@ -23,10 +24,11 @@ exports.showProductById = async (req, res) => {
         let html = `
                 <html>
                     <head>
-                        <title>Productos</title>
-                        <link rel="stylesheet" type="text/css" href="/styles.css">
+                        ${baseHtml()}
+                        <title>Productos</title>                        
                     </head>
                     <body>
+                        ${navBarHTML}
                 `;
         html += '<h1>Detalle de producto</h1>';
         html += '<div class="product-container">'; 
@@ -86,6 +88,7 @@ exports.updateProduct = async (req, res) => {
 //Mostrar formulario de actualización producto
 exports.showEditProduct = (req, res) => {
     try {
+        const navBarHTML = getNavBar();
         const productId = req.params.productId;
         console.log(productId)
         if (!productId) {
@@ -95,10 +98,11 @@ exports.showEditProduct = (req, res) => {
         let html = `
                 <html>
                     <head>
+                        ${baseHtml()}
                         <title>Productos</title>
-                        <link rel="stylesheet" type="text/css" href="/styles.css">
                     </head>
                     <body>
+                        ${navBarHTML}
                 `;
         html += '<h1>Editar producto</h1>';
         html += '<div class="product-container">'; 
@@ -133,6 +137,7 @@ exports.showEditProduct = (req, res) => {
 //Eliminar un producto
 exports.deleteProduct = async (req, res) => {
     try {
+        const navBarHTML = getNavBar();
         const product = await Product.findById(req.params.productId);
         const idProduct = await req.params.productId;
         await Product.findByIdAndDelete(idProduct);
@@ -141,12 +146,11 @@ exports.deleteProduct = async (req, res) => {
         }
 
         let html = `
-                <html>
-                    <head>
+                    ${baseHtml()}
                         <title>Productos</title>
-                        <link rel="stylesheet" type="text/css" href="/styles.css">
                     </head>
                     <body>
+                        ${navBarHTML}
                 `;
         html += '<h1>Producto eliminado</h1>';
         html += '<div class="product-container">'; 
@@ -173,20 +177,62 @@ exports.deleteProduct = async (req, res) => {
         res.status(500).send('Error interno del servidor');
     }
 }
+
+//Cargar estilos HTML
+baseHtml = () => {
+    let html = `
+    <html>
+        <head>
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+            <link rel="stylesheet" type="text/css" href="/styles.css">
+    `;
+    return html;
+}
+
+//Genera barra de navegación con las categorías de los productos
+getNavBar = () => {
+    try {
+        let categorias = ["Camisetas", "Pantalones", "Zapatos", "Accesorios"];
+
+        let html = `
+            <nav>
+                <ul class="barra-navegacion">
+            `;
+
+            categorias.forEach(categoria => {
+                html += `
+                        <li><a href="/products?categoria=${categoria}">${categoria}</a></li>
+                `;
+            });
+
+            html += `
+                    </ul>
+                </nav>
+            `;
+        
+        return html;
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error interno del servidor');
+    }
+};
+
 //Genera el html de los productos. Recibe un array de productos y devuelve el html de las tarjetas de los productos
 getProductCards = (products, url) => {
+    const navBarHTML = getNavBar();
     let html = `
-        <html>
-            <head>
+        ${baseHtml()}
                 <title>Productos</title>
-                <link rel="stylesheet" type="text/css" href="/styles.css">
             </head>
             <body>
+                ${navBarHTML}
         `;
-    html += '<h1>Lista de Productos</h1>';
-    html += '<div class="product-container">'; 
 
     if (url == '/dashboard') {
+        html += '<h1>Panel de administración</h1>';
+        html += '<div class="product-container">'; 
         for (let product of products) {
             html += `
                 <div id="product-card" class="product-card">
@@ -199,6 +245,8 @@ getProductCards = (products, url) => {
             `;
         }
     } else {
+        html += '<h1>Lista de Productos</h1>';
+        html += '<div class="product-container">'; 
         for (let product of products) {
             html += `
                 <div id="product-card" class="product-card">

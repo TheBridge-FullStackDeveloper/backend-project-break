@@ -46,18 +46,39 @@ table {
 
 body {
     margin: 0;
+    font-family: "Montserrat", sans-serif;
 }
 
 h1 {
     text-align: center;
     height: 80px;
-    margin-bottom: 16px;
+    margin-bottom: 36px;
     background: #000;
     color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: default;
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+}
+
+nav {
+    padding: 16px 32px;
+    background: #e4e4e4;
+}
+
+.barra-navegacion {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.barra-navegacion a {
+    text-decoration: none;
+    color: #000;
+}
+
+.barra-navegacion a:hover {
+    color: #9e4dbb;
 }
 
 .product-container {
