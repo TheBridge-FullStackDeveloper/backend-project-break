@@ -6,13 +6,16 @@ const htmlHead = `<!DOCTYPE html>
                 <head>
                     <meta charset="UTF-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <link rel="stylesheet" href="/styles.css">
                     <title>Document</title>
                 </head>
                 <body>`;
 
+const htmlEnd = `</body></html>`
+
 function getNavBar() {
     html = `<header>
-        <nav>
+        <nav class="nav">
             <a href="/products">Productos</a>
             <a href="/products/category/camisetas">Camisetas</a>
             <a href="/products/category/pantalones">Pantalones</a>
@@ -36,10 +39,14 @@ function getProductCards(products) {
         <p>${product.description}</p>
         <p>${product.price}€</p>
         <a href="/products/${product._id}">Ver detalle</a>
-        </div>
-        </body> </html>   
+        
+        <a href="/dashboard/${product._id}/edit">Actualizar</a>
+        <a href="/dashboard/${product._id}/delete">Eliminar</a>        
+        </div>           
         `
     }
+
+
     return html;
 }
 
@@ -47,9 +54,10 @@ const ProductController = {
     async showProducts(req, res) {
         try {
             // controlar con dashboard
+            console.log('req.path', req.path)
             const products = await Product.find();
             const productCards = getProductCards(products);
-            const html = htmlHead + getNavBar() + productCards
+            const html = htmlHead + getNavBar() + productCards + htmlEnd
             res.send(html);
         } catch (error) {
             console.error(error)
@@ -59,10 +67,11 @@ const ProductController = {
     async showProductById(req, res) {
         try {
             // controlar con dashboard
-            const idProduct = req.params._id;
-            const product = await Product.findById(idProduct);
+            const idProduct = req.params.productId;
+            const product = [await Product.findById(idProduct)];
             const productCards = getProductCards(product)
-            const html = htmlHead + getNavBar() + productCards
+
+            const html = htmlHead + getNavBar() + productCards + htmlEnd
             res.send(html);
 
 
@@ -101,11 +110,11 @@ const ProductController = {
                 <br>
                 <button type="submit">Enviar</button>
                 </form>
-                </body></html>      
+                      
             
             `;
 
-            html = htmlHead + getNavBar() + form
+            html = htmlHead + getNavBar() + form + htmlEnd
 
             res.send(html)
                 ;
@@ -123,6 +132,40 @@ const ProductController = {
     },
     async showEditProduct(req, res) {
         try {
+            const idProduct = req.params.productId;
+            const product = await Product.findById(idProduct);
+
+            const form = `
+                <h2>Actualizar producto</h2>
+                <form action="/dashboard/${idProduct}" method="post">
+                    <label for="name">Nombre</label>
+                    <input type="text" id="${product.name}" name="${product.name}" required placeholder="${product.name}"><br>
+
+                    <label for="description">Descripción</label>
+                    <input type="text" id="${product.description}" name="${product.description}" required><br>
+
+                    <label for="price">Precio</label>
+                    <input type="text" id="${product.price}" name="${product.price}" required><br>
+
+                    <label for="image">Imagen</label>
+                    <input type="text" id="${product.image}" name="${product.image}" required><br>
+
+                    <label for="category">Categoria</label>
+                    <input type="text" id="${product.category}" name="${product.category}" required><br>
+
+                    <label for="size">Talla</label>
+                    <input type="text" id="${product.size}" name="${product.size}" required><br>
+                    <br>
+
+                    <button type="submit">Actualizar</button>
+                </form>
+                    
+            
+            `;
+
+            html = htmlHead + getNavBar() + form + htmlEnd
+
+            res.send(html)
 
 
 
@@ -135,21 +178,21 @@ const ProductController = {
 
     async updateProduct(req, res) {
         try {
-            const idProduct = req.params._id;
+            const idProduct = req.params.productId;
             const updateProduct = await Product.findByIdAndUpdate(
                 id, {
-                name,
-                description,
-                imagen,
-                category,
-                size,
-                price
+                name: req.body.name,
+                description: req.body.description,
+                imagen: req.body.imagen,
+                category: req.body.category,
+                size: req.body.size,
+                price: req.body.price
             }, { new: true }
             )
-            res.send(updateProduct)
             if (!updateProduct) {
                 return res.status(404).json({ mensaje: 'Product id not found' })
             }
+            res.send(updateProduct)
 
 
 
@@ -160,8 +203,15 @@ const ProductController = {
     },
     async deleteProduct(req, res) {
         try {
-
-
+            const idProduct = req.params.productId;
+            console.log('delete', req.params.productId)
+            const deletedProduct = await Product.findByIdAndDelete(idProduct)
+            if (!deletedProduct) {
+                return res.status(404).json({ mensaje: 'Product with that idProduct not found' })
+            }
+            let message = `<h2>Producto eliminado correctamente</h2>`
+            html = htmlHead + getNavBar() + message + htmlEnd
+            res.send(html)
 
         } catch (error) {
             console.error(error)

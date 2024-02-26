@@ -1,6 +1,8 @@
 const express = require('express');
 const dbConnection = require('./config/db');
 const app = express();
+const path = require('path');
+
 require('dotenv').config();
 
 const PORT = process.env.PORT || 3000
@@ -10,6 +12,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 
 app.use('/', router);
+
+const publicPath = path.resolve(__dirname, '..', 'public')
+app.use(express.static(publicPath));
 
 dbConnection()
 

@@ -20,8 +20,7 @@ router.get('/dashboard/productId', ProductController.showProductById);
 router.get('/dashboard/:productId/edit', ProductController.showEditProduct);
 router.put('/dashboard/:productId', ProductController.updateProduct);
 
-
-router.delete('/dashboard/:productId/delete', ProductController.deleteProduct);
+router.get('/dashboard/:productId/delete', ProductController.deleteProduct);
 
 
 
