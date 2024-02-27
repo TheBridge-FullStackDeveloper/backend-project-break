@@ -42,7 +42,7 @@ function getProductCards(products) {
     let html = `<div class="cardContainer">`;
     for (let product of products) {
         html += `
-        <div class="product-card">
+        <div class="productCard">
         <h2>${product.name}</h2>
         <img src="${product.image}" alt="${product.name}">        
         <p>${product.description}</p>
@@ -52,6 +52,22 @@ function getProductCards(products) {
         `
     }
     return html + '<div>';
+}
+
+function getProductOneCard(product) {
+    let html = `<div class="cardContainer">
+        <div class="productCard">
+            <h2>${product.name}</h2>
+            <img src="${product.image}" alt="${product.name}">        
+            <p>${product.description}</p>
+            <p>${product.price}€</p>
+            <a href="/products/${product._id}">Ver detalle</a>               
+        </div> 
+    
+    
+    `
+
+
 }
 
 const ProductController = {
@@ -98,7 +114,7 @@ const ProductController = {
                 <label for="description">Descripción</label>
                 <input type="text" id="description" name="description" required><br>
                 <label for="price">Precio</label>
-                <input type="text" id="price" name="price" required><br>
+                <input type="number" id="price" name="price" required><br>
                 <label for="image">Imagen</label>
                 <input type="text" id="image" name="image" required><br>
                 <label for="category">Categoria</label>
@@ -153,7 +169,7 @@ const ProductController = {
                     <input type="text" id="${product.description}" name="${product.description}" required placeholder="${product.description}"><br>
 
                     <label for="price">Precio</label>
-                    <input type="text" id="${product.price}" name="${product.price}" required placeholder="${product.price}"><br>
+                    <input type="number" id="${product.price}" name="${product.price}" required placeholder="${product.price}"><br>
 
                     <label for="image">Imagen</label>
                     <input type="text" id="${product.image}" name="${product.image}" required placeholder="${product.image}"><br>
