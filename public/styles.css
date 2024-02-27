@@ -136,7 +136,8 @@ a {
 }
 
 img {
-    width: 300px
+    width: 300px;
+    height: 300px;
 }
 
 h2{
@@ -163,6 +164,7 @@ h2{
 .cardContainer {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     gap: 10px;
 }
 
@@ -181,6 +183,8 @@ h2{
     background-color:#1239ff;
     color: #fff;
     border-radius: 10px;
+    align-self: center;
+    border: none;
 }
 .formContainer{
     display: flex;
@@ -193,4 +197,19 @@ h2{
     gap:5px;
     width: 300px;
     margin-top: 10px;
+}
+
+.formcategory{
+    display: flex;
+    flex-direction: column;
+    font-size: 12px;
+}
+input{
+    border-radius: 10px;
+    padding: 5px;
+}
+
+select{
+    border-radius: 10px;
+    padding: 5px;
 }

@@ -1,5 +1,5 @@
 const Product = require('../models/Product')
-let dash, token;
+let token;
 
 const htmlHead = `<!DOCTYPE html>
                 <html lang="es">
@@ -38,7 +38,7 @@ function getNavBar() {
 }
 
 function getProductCards(products) {
-    console.log('products dash', dash)
+    
     let option;
     let html = `<div class="cardContainer">`;
     if (token){option = 'dashboard'}else{option = 'products'}
@@ -62,11 +62,10 @@ function getProductOneCard(product) {
             <h2>${product.name}</h2>
             <img src="${product.image}" alt="${product.name}">        
             <p>${product.description}</p>
-            <p>${product.price}€</p>
-            <p>${product.size}</p>
-            <p>${product.category}</p>
+            <p>Precio: ${product.price}€</p>
+            <p>Talla: ${product.size.toString().toUpperCase()}</p>
+            <p>Categoria: ${product.category}</p>
             `
-
     if (token){
         html += `        
             <a href="/dashboard/${product._id}/edit" class="boton">actualizar</a>
@@ -81,8 +80,7 @@ const ProductController = {
     async showProducts(req, res) {
         try {
             // controlar con dashboard
-            console.log('showproducts token', token)
-           
+                
             const products = await Product.find();
             const productCards = getProductCards(products, token);
             const html = htmlHead + getNavBar() + productCards + htmlEnd
@@ -97,7 +95,7 @@ const ProductController = {
             // controlar con dashboard
             const idProduct = req.params.productId;
             const product = await Product.findById(idProduct);
-            console.log('product', product)
+            
             const productCards = getProductOneCard(product, token)
 
             const html = htmlHead + getNavBar() + productCards + htmlEnd
@@ -113,15 +111,16 @@ const ProductController = {
         try {
             const form = `
                 <h2> Crear nuevo producto</h2>
+                <div class="formContainer">
                 <form class="formulario" action="/dashboard" method="post">
                 <label for="name">Nombre</label>
-                <input type="text" id="name" name="name" required><br>
+                <input type="text" id="name" name="name" required>
                 <label for="description">Descripción</label>
-                <input type="text" id="description" name="description" required><br>
+                <input type="text" id="description" name="description" required>
                 <label for="price">Precio</label>
-                <input type="number" id="price" name="price" required><br>
+                <input type="number" id="price" name="price" required>
                 <label for="image">Imagen</label>
-                <input type="text" id="image" name="image" required><br>
+                <input type="url" id="image" name="image" required>
                 <label for="category">Categoria</label>
                 <select name="category">
                     <option value="camisetas">Camisetas</option>
@@ -139,6 +138,7 @@ const ProductController = {
                 <br>
                 <button class="boton" type="submit">Enviar</button>
                 </form>
+                </div>
                       
             
             `;
@@ -155,10 +155,8 @@ const ProductController = {
     },
     async showProductCategory(req, res) {
         try {
-            const tipo = req.params;
-            console.log('TIPO', tipo);
+            const tipo = req.params;            
             const productCategory = await Product.find({ category: tipo.category });
-            console.log('productCategory', productCategory)
             const productCards = getProductCards(productCategory);
             const html = htmlHead + getNavBar() + productCards + htmlEnd
             res.send(html);
@@ -173,7 +171,7 @@ const ProductController = {
     async createProduct(req, res) {
 
         const product = await Product.create({ ...req.body });
-        res.redirect('/products');
+        res.redirect('/dashboard');
 
     },
     async showEditProduct(req, res) {
@@ -192,36 +190,49 @@ const ProductController = {
                     <input type="text" id="description" name="description"  value="${product.description}">
 
                     <label for="price">Precio</label>
-                    <input type="number" id="price" name="price"  value="${product.price}">
+                    <input type="number" id="price" name="price" value="${product.price}">
 
                     <label for="image">Imagen</label>
-                    <input type="text" id="image" name="image"  value="${product.image}">
+                    <input type="url" id="image" name="image"  value="${product.image}">
 
-                    <label for="category">Categoria: <strong>${product.category}</strong> </label>
-                    <select name="category">                    
-                        <option value="camisetas">Camisetas</option>
-                        <option value="zapatos">Zapatos</option>
-                        <option value="pantalones">Pantalones</option>
-                        <option value="accesorios">Accesorios</option>
-                    </select>
-                    <label for="size">Talla:<strong>${product.size}</strong></label>
-                    <select name="size">
-                        <option value="xs">XS</option>
-                        <option value="s">S</option>
-                        <option value="m">M</option>
-                        <option value="l">L</option>
-                        <option value="xl">XL</option>
-                    </select>                   
+                    <div class="formcategory">
+                    <p>Categoria:<p>
+                        <input type="radio" id="category" name="category" value="camisetas">
+                        <label for="category">Camisetas</label>
 
+                        <input type="radio" id="category" name="category" value="zapatos">
+                        <label for="category">Zapatos</label>
+
+                        <input type="radio" id="category" name="category" value="pantalones">
+                        <label for="category">Pantalones</label>
+
+                        <input type="radio" id="category" name="category" value="accesorios">
+                        <label for="category">Accesorios</label>
+                        </div>
+                    <div class="formcategory">
+                    <p>Tallas:<p>
+                        <input type="radio" id="category" name="size" value="xs">
+                        <label for="category">XS</label>
+
+                        <input type="radio" id="category" name="size" value="s">
+                        <label for="category">S</label>
+
+                        <input type="radio" id="category" name="size" value="m">
+                        <label for="category">M</label>
+
+                        <input type="radio" id="category" name="size" value="l">
+                        <label for="category">L</label>
+
+                        <input type="radio" id="category" name="size" value="xl">
+                        <label for="category">XL</label>
+                        </div>
                     <button  class="boton" type="submit">Actualizar</button>
                 </form>
-                </div>
-                    
+                </div>                    
             
             `;
 
             html = htmlHead + getNavBar() + form + htmlEnd
-
             res.send(html)
 
 
@@ -237,11 +248,15 @@ const ProductController = {
         try {
             const idProduct = req.params.productId;
             const pBody = req.body
-            console.log('pBody', pBody)
             const updateProduct = await Product.findByIdAndUpdate(
-                idProduct, { pBody
-            }, { new: true })
-            console.log('UpDate', updateProduct);
+                idProduct, {
+                    name: pBody.name,
+                    description: pBody.description,
+                    category: pBody.category,    
+                    price: pBody.price,
+                    image: pBody.image,
+                    size: pBody.size
+            }, { new: true })            
             if (!updateProduct) {
                 return res.status(404).json({ mensaje: 'Product id not found' })
             }
@@ -258,7 +273,6 @@ const ProductController = {
     async deleteProduct(req, res) {
         try {
             const idProduct = req.params.productId;
-            console.log('delete', req.params.productId)
             const deletedProduct = await Product.findByIdAndDelete(idProduct)
             if (!deletedProduct) {
                 return res.status(404).json({ mensaje: 'Product with that idProduct not found' })
