@@ -18,7 +18,7 @@ router.post('/dashboard', ProductController.createProduct);
 router.get('/dashboard/productId', ProductController.showProductById);
 
 router.get('/dashboard/:productId/edit', ProductController.showEditProduct);
-router.put('/dashboard/:productId', ProductController.updateProduct);
+router.post('/dashboard/:productId', ProductController.updateProduct);
 
 router.get('/dashboard/:productId/delete', ProductController.deleteProduct);
 

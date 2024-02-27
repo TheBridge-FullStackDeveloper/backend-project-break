@@ -22,7 +22,6 @@ package-lock.json
 /build/
 /dist/
 /out/
-/public/
 /build-output/
 # OS-generated files
 .DS_Store

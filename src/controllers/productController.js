@@ -1,5 +1,5 @@
 const Product = require('../models/Product')
-
+let dash;
 
 const htmlHead = `<!DOCTYPE html>
                 <html lang="es">
@@ -14,23 +14,32 @@ const htmlHead = `<!DOCTYPE html>
 const htmlEnd = `</body></html>`
 
 function getNavBar() {
-    html = `<header>
-        <nav class="nav">
-            <a href="/products">Productos</a>
-            <a href="/products/category/camisetas">Camisetas</a>
-            <a href="/products/category/pantalones">Pantalones</a>
-            <a href="/products/category/zapatos">Zapatos</a>
-            <a href="/products/category/accesorios">Accesorios</a>
+    let html = `<header>
+    <nav class="nav">
+        <a href="/products">Productos</a>
+        <a href="/products/category/camisetas">Camisetas</a>
+        <a href="/products/category/pantalones">Pantalones</a>
+        <a href="/products/category/zapatos">Zapatos</a>
+        <a href="/products/category/accesorios">Accesorios</a>`;
+    if (dash) {
+        html += `
             <a href="/dashboard/new">Nuevo Producto</a>
-            <a href="/dashboard">Login</a>
+            <a href="/dashboard">logout</a>
         </nav>    
     </header`
+    } else {
+        html +=
+            `
+            <a href="/dashboard">login</a>
+        </nav>    
+    </header`
+    }
 
     return html;
 }
 
 function getProductCards(products) {
-    let html = '';
+    let html = `<div class="cardContainer">`;
     for (let product of products) {
         html += `
         <div class="product-card">
@@ -38,23 +47,20 @@ function getProductCards(products) {
         <img src="${product.image}" alt="${product.name}">        
         <p>${product.description}</p>
         <p>${product.price}€</p>
-        <a href="/products/${product._id}">Ver detalle</a>
-        
-        <a href="/dashboard/${product._id}/edit">Actualizar</a>
-        <a href="/dashboard/${product._id}/delete">Eliminar</a>        
+        <a href="/products/${product._id}">Ver detalle</a>               
         </div>           
         `
     }
-
-
-    return html;
+    return html + '<div>';
 }
 
 const ProductController = {
     async showProducts(req, res) {
         try {
             // controlar con dashboard
-            console.log('req.path', req.path)
+            let path = req.path;
+            path.substr(0, 10) == '/dashboard' ? dash = true : dash = false
+
             const products = await Product.find();
             const productCards = getProductCards(products);
             const html = htmlHead + getNavBar() + productCards + htmlEnd
@@ -67,6 +73,8 @@ const ProductController = {
     async showProductById(req, res) {
         try {
             // controlar con dashboard
+            let path = req.path;
+            path.substr(0, 10) == '/dashboard' ? dash = true : dash = false
             const idProduct = req.params.productId;
             const product = [await Product.findById(idProduct)];
             const productCards = getProductCards(product)
@@ -142,20 +150,26 @@ const ProductController = {
                     <input type="text" id="${product.name}" name="${product.name}" required placeholder="${product.name}"><br>
 
                     <label for="description">Descripción</label>
-                    <input type="text" id="${product.description}" name="${product.description}" required><br>
+                    <input type="text" id="${product.description}" name="${product.description}" required placeholder="${product.description}"><br>
 
                     <label for="price">Precio</label>
-                    <input type="text" id="${product.price}" name="${product.price}" required><br>
+                    <input type="text" id="${product.price}" name="${product.price}" required placeholder="${product.price}"><br>
 
                     <label for="image">Imagen</label>
-                    <input type="text" id="${product.image}" name="${product.image}" required><br>
-
-                    <label for="category">Categoria</label>
-                    <input type="text" id="${product.category}" name="${product.category}" required><br>
-
-                    <label for="size">Talla</label>
-                    <input type="text" id="${product.size}" name="${product.size}" required><br>
-                    <br>
+                    <input type="text" id="${product.image}" name="${product.image}" required placeholder="${product.image}"><br>
+                    <select name="category">
+                        <option value="camiseta">Camisetas</option>
+                        <option value="pantalones">Pantalones</option>
+                        <option value="zapatos">Zapatos</option>
+                        <option value="accesorios">Accesorios</option>
+                    </select>
+                    <select name="size">
+                        <option value="xs">XS</option>
+                        <option value="s">S</option>
+                        <option value="m">M</option>
+                        <option value="l">L</option>
+                        <option value="xl">XL</option>
+                    </select>                   
 
                     <button type="submit">Actualizar</button>
                 </form>
@@ -180,15 +194,16 @@ const ProductController = {
         try {
             const idProduct = req.params.productId;
             const updateProduct = await Product.findByIdAndUpdate(
-                id, {
+                idProduct, {
                 name: req.body.name,
                 description: req.body.description,
-                imagen: req.body.imagen,
+                image: req.body.image,
                 category: req.body.category,
                 size: req.body.size,
                 price: req.body.price
             }, { new: true }
             )
+            console.log('UpDate', updateProduct);
             if (!updateProduct) {
                 return res.status(404).json({ mensaje: 'Product id not found' })
             }
