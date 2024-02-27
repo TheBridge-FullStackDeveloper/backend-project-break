@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const controller = require('../controllers/productController');
-const Product = require('../models/Product'); 
+const verificarAutenticacion = require('../middlewares/authMiddleware');
 
 //Mostrar todos los productos
 router.get('/', controller.showProducts);
@@ -12,7 +12,7 @@ router.get('/products/:productId', controller.showProductById);
 router.get('/dashboard/:productId', controller.showProductById);
 
 //Devuelve el dashboard del administrador con todos los productos
-router.get('/dashboard', controller.showProducts);
+router.get('/dashboard', verificarAutenticacion, controller.showProducts);
 
 //Devuelve el formulario para subir un artículo nuevo.
 router.get('/new', controller.showNewProduct);

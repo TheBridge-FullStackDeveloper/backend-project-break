@@ -280,7 +280,6 @@ baseHtml = () => {
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
             <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-e+ZQ1+OeoCz0DMQgDX2t3jKOQFWRaD/jm2xvjJvIM2hg7vMTZ6ayYEeDm4lM/XJXHXT1XLyDlU8cVKuVfyCtLQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
             <link rel="stylesheet" type="text/css" href="/styles.css">
     `;
     return html;
