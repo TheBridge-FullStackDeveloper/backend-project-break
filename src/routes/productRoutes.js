@@ -14,26 +14,36 @@ router.get('/dashboard/:productId', controller.showProductById);
 //Devuelve el dashboard del administrador con todos los productos
 router.get('/dashboard', controller.showProducts);
 
+//Devuelve el formulario para subir un artículo nuevo.
+router.get('/new', controller.showNewProduct);
+
+// Crear un nuevo producto
+router.post("/dashboard", controller.createProduct)
+
 //Mostrar formulario de actualización producto
 router.get('/dashboard/:productId/edit', controller.showEditProduct);
 
 //Eliminar un producto
 router.get('/dashboard/:productId/delete', controller.deleteProduct);
 
-//Devuelve el formulario para subir un artículo nuevo. (No disponible a falta de front)
 
-//Crear un nuevo producto
-router.post("/dashboard", async(req, res) => {
-    try {
-        const product = await Product.create(req.body);
-        res.status(201).send({ mensaje: 'Producto añadido', product});
-    } catch (error) {
-        console.error(error);
-        res
-            .status(500)
-            .send({ message: "Error al crear un nuevo producto" });
-    }
-});
+
+
+
+
+// Crear un nuevo producto
+// router.post("/dashboard", async(req, res) => {
+//     try {
+//         const product = await Product.create(req.body);
+//         res.status(201).send({ mensaje: 'Producto añadido', product});
+//     } catch (error) {
+//         console.error(error);
+//         res
+//             .status(500)
+//             .send({ message: "Error al crear un nuevo producto" });
+//     }
+// });
+
 
 //Actualizar un producto
 /*

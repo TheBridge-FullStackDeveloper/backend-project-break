@@ -72,6 +72,69 @@ exports.showProductById = async (req, res) => {
     }
 }
 
+// Devuelve la vista con el formulario para subir un artículo nuevo.
+
+exports.showNewProduct = (req, res) => {
+    try {
+        const navBarHTML = getNavBar();
+        
+        let html = `
+                <html>
+                    <head>
+                        ${baseHtml()}
+                        <title>Productos</title>
+                    </head>
+                    <body>
+                        ${navBarHTML}
+                `;
+        html += '<h1>Añadir Nuevo Producto</h1>';
+        html += '<div class="product-container">'; 
+
+        html += `
+            <form action="/dashboard" method="POST">
+                <input type="hidden" name="productId" value="<%= productId %>">
+                <input type="text" id="productName" name="nombre" placeholder="Nombre">
+                <br><br>
+                <input type="text" id="productDescription" name="descripcion" placeholder="Descripción">
+                <br><br>
+                <input type="text" id="productImage" name="imagen" placeholder="Imagen">
+                <br><br>
+                <input type="text" id="productCategory" name="categoria" placeholder="Categoría">
+                <br><br>
+                <input type="text" id="productSize" name="talla" placeholder="Talla">
+                <br><br>
+                <input type="text" id="productPrice" name="precio" placeholder="Precio">
+                <br><br>
+                <button class="update" type="submit">Crear Producto</button>
+            </form>
+        `;
+            
+        html += '</div>'; 
+        html += '</body></html>';
+        res.setHeader('Content-Type', 'text/html');
+        res.send(html);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error interno del servidor');
+    }
+};
+
+//Crear nuevo producto
+exports.createProduct= async (req, res) => {
+    const NewProduct = req.body
+    try {
+        const productDB = new Product(NewProduct);
+        await productDB.save()
+        res.redirect("/dashboard")
+    } catch (error) {
+        console.error(error);
+        res
+            .status(500)
+            .send({ message: "Error al crear un nuevo producto" });
+    }
+};
+
+
 //Actualizar un producto
 exports.updateProduct = async (req, res) => {
     try {
