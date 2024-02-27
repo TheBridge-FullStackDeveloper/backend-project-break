@@ -1,5 +1,5 @@
 const Product = require('../models/Product')
-let dash;
+let dash, token;
 
 const htmlHead = `<!DOCTYPE html>
                 <html lang="es">
@@ -21,33 +21,34 @@ function getNavBar() {
         <a href="/products/category/pantalones">Pantalones</a>
         <a href="/products/category/zapatos">Zapatos</a>
         <a href="/products/category/accesorios">Accesorios</a>`;
-    if (dash) {
+    if (token) {
         html += `
             <a href="/dashboard/new">Nuevo Producto</a>
-            <a href="/dashboard">logout</a>
+            <a href="/logout">logout</a>
         </nav>    
-    </header`
+    </header>`
     } else {
-        html +=
-            `
-            <a href="/dashboard">login</a>
+        html += `
+            <a href="/login">login</a>
         </nav>    
-    </header`
+    </header>`
     }
 
     return html;
 }
 
 function getProductCards(products) {
+    console.log('products dash', dash)
+    let option;
     let html = `<div class="cardContainer">`;
+    if (token){option = 'dashboard'}else{option = 'products'}
     for (let product of products) {
         html += `
         <div class="productCard">
         <h2>${product.name}</h2>
         <img src="${product.image}" alt="${product.name}">        
-        <p>${product.description}</p>
-        <p>${product.price}€</p>
-        <a href="/products/${product._id}">Ver detalle</a>               
+        <a href="/${option}/${product._id}" class="boton">Ver detalle</a>    
+           
         </div>           
         `
     }
@@ -55,30 +56,35 @@ function getProductCards(products) {
 }
 
 function getProductOneCard(product) {
+    
     let html = `<div class="cardContainer">
         <div class="productCard">
             <h2>${product.name}</h2>
             <img src="${product.image}" alt="${product.name}">        
             <p>${product.description}</p>
             <p>${product.price}€</p>
-            <a href="/products/${product._id}">Ver detalle</a>               
-        </div> 
-    
-    
-    `
+            <p>${product.size}</p>
+            <p>${product.category}</p>
+            `
 
-
+    if (token){
+        html += `        
+            <a href="/dashboard/${product._id}/edit" class="boton">actualizar</a>
+            <a href="/dashboard/${product._id}/delete" class="boton">eliminar</a>                          
+         `
+    }
+    
+    return html + '</div>';
 }
 
 const ProductController = {
     async showProducts(req, res) {
         try {
             // controlar con dashboard
-            let path = req.path;
-            path.substr(0, 10) == '/dashboard' ? dash = true : dash = false
-
+            console.log('showproducts token', token)
+           
             const products = await Product.find();
-            const productCards = getProductCards(products);
+            const productCards = getProductCards(products, token);
             const html = htmlHead + getNavBar() + productCards + htmlEnd
             res.send(html);
         } catch (error) {
@@ -89,11 +95,10 @@ const ProductController = {
     async showProductById(req, res) {
         try {
             // controlar con dashboard
-            let path = req.path;
-            path.substr(0, 10) == '/dashboard' ? dash = true : dash = false
             const idProduct = req.params.productId;
-            const product = [await Product.findById(idProduct)];
-            const productCards = getProductCards(product)
+            const product = await Product.findById(idProduct);
+            console.log('product', product)
+            const productCards = getProductOneCard(product, token)
 
             const html = htmlHead + getNavBar() + productCards + htmlEnd
             res.send(html);
@@ -108,7 +113,7 @@ const ProductController = {
         try {
             const form = `
                 <h2> Crear nuevo producto</h2>
-                <form action="/dashboard" method="post">
+                <form class="formulario" action="/dashboard" method="post">
                 <label for="name">Nombre</label>
                 <input type="text" id="name" name="name" required><br>
                 <label for="description">Descripción</label>
@@ -132,7 +137,7 @@ const ProductController = {
                     <option value="xl">XL</option>
                 </select>
                 <br>
-                <button type="submit">Enviar</button>
+                <button class="boton" type="submit">Enviar</button>
                 </form>
                       
             
@@ -148,6 +153,23 @@ const ProductController = {
             res.status(500).send('error de articulo nuevo')
         }
     },
+    async showProductCategory(req, res) {
+        try {
+            const tipo = req.params;
+            console.log('TIPO', tipo);
+            const productCategory = await Product.find({ category: tipo.category });
+            console.log('productCategory', productCategory)
+            const productCards = getProductCards(productCategory);
+            const html = htmlHead + getNavBar() + productCards + htmlEnd
+            res.send(html);
+            
+
+        } catch (error) {
+            console.error(error)
+            res.status(500).send('error de articulo nuevo')
+        }
+        
+    },
     async createProduct(req, res) {
 
         const product = await Product.create({ ...req.body });
@@ -161,24 +183,28 @@ const ProductController = {
 
             const form = `
                 <h2>Actualizar producto</h2>
-                <form action="/dashboard/${idProduct}" method="post">
+                <div class="formContainer">                
+                <form class="formulario" action="/dashboard/${idProduct}" method="post">
                     <label for="name">Nombre</label>
-                    <input type="text" id="${product.name}" name="${product.name}" required placeholder="${product.name}"><br>
+                    <input type="text" id="name" name="name"   value="${product.name}">
 
                     <label for="description">Descripción</label>
-                    <input type="text" id="${product.description}" name="${product.description}" required placeholder="${product.description}"><br>
+                    <input type="text" id="description" name="description"  value="${product.description}">
 
                     <label for="price">Precio</label>
-                    <input type="number" id="${product.price}" name="${product.price}" required placeholder="${product.price}"><br>
+                    <input type="number" id="price" name="price"  value="${product.price}">
 
                     <label for="image">Imagen</label>
-                    <input type="text" id="${product.image}" name="${product.image}" required placeholder="${product.image}"><br>
-                    <select name="category">
-                        <option value="camiseta">Camisetas</option>
-                        <option value="pantalones">Pantalones</option>
+                    <input type="text" id="image" name="image"  value="${product.image}">
+
+                    <label for="category">Categoria: <strong>${product.category}</strong> </label>
+                    <select name="category">                    
+                        <option value="camisetas">Camisetas</option>
                         <option value="zapatos">Zapatos</option>
+                        <option value="pantalones">Pantalones</option>
                         <option value="accesorios">Accesorios</option>
                     </select>
+                    <label for="size">Talla:<strong>${product.size}</strong></label>
                     <select name="size">
                         <option value="xs">XS</option>
                         <option value="s">S</option>
@@ -187,8 +213,9 @@ const ProductController = {
                         <option value="xl">XL</option>
                     </select>                   
 
-                    <button type="submit">Actualizar</button>
+                    <button  class="boton" type="submit">Actualizar</button>
                 </form>
+                </div>
                     
             
             `;
@@ -209,21 +236,17 @@ const ProductController = {
     async updateProduct(req, res) {
         try {
             const idProduct = req.params.productId;
+            const pBody = req.body
+            console.log('pBody', pBody)
             const updateProduct = await Product.findByIdAndUpdate(
-                idProduct, {
-                name: req.body.name,
-                description: req.body.description,
-                image: req.body.image,
-                category: req.body.category,
-                size: req.body.size,
-                price: req.body.price
-            }, { new: true }
-            )
+                idProduct, { pBody
+            }, { new: true })
             console.log('UpDate', updateProduct);
             if (!updateProduct) {
                 return res.status(404).json({ mensaje: 'Product id not found' })
             }
-            res.send(updateProduct)
+            
+            res.redirect(`${idProduct}`)
 
 
 
@@ -248,6 +271,15 @@ const ProductController = {
             console.error(error)
             res.status(500).send('error de eliminacion articulo')
         }
+    },
+    async login(req, res){
+        token = true;
+        res.redirect('/dashboard')
+    },
+
+    async logout(req, res){
+        token=false;
+        res.redirect('/products')
     }
 }
 

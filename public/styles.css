@@ -139,12 +139,21 @@ img {
     width: 300px
 }
 
+h2{
+    font-size: 16px;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: bold;
+
+    text-align: center;
+}
+
 .nav {
     display: flex;
     justify-content: center;
     padding: 15px;
     background-color: #000;
     gap: 10px;
+    margin-bottom: 15px;
 }
 
 .nav a {
@@ -154,13 +163,34 @@ img {
 .cardContainer {
     display: flex;
     justify-content: center;
+    gap: 10px;
 }
 
 .productCard {
     display: flex;
     flex-direction: column;
-    border: 1px solid black;
+    border: 1px solid rgb(132, 131, 131);
     border-radius: 10px;
     width: 300px;
     padding: 10px;
+    gap: 5px;
+}
+
+.boton{
+    padding: 10px;
+    background-color:#1239ff;
+    color: #fff;
+    border-radius: 10px;
+}
+.formContainer{
+    display: flex;
+    justify-content: center;
+}
+
+.formulario{
+    display: flex;
+    flex-direction: column;
+    gap:5px;
+    width: 300px;
+    margin-top: 10px;
 }
