@@ -28,13 +28,13 @@ exports.showProductById = async (req, res) => {
                         <title>Productos</title>                        
                     </head>
                     <body>
-                        ${navBarHTML}
                 `;
         html += `
                     <div class="header">
                         <a href="/"><img src="/images/home.png" alt="home-icon"></a>
-                        <h1>Detalle</h1>
                     </div>
+                    ${navBarHTML}
+                    <h1>Detalle</h1>
                 `;
         html += '<div class="product-container">'; 
 
@@ -90,13 +90,13 @@ exports.showNewProduct = (req, res) => {
                         <title>Productos</title>
                     </head>
                     <body>
-                        ${navBarHTML}
                 `;
         html += `
                     <div class="header">
                         <a href="/"><img src="/images/home.png" alt="home-icon"></a>
-                        <h1>Listado de Productos</h1>
                     </div>
+                    ${navBarHTML}
+                    <h1>Listado de productos</h1>
                 `;
         html += '';
         html += '<div class="product-container">'; 
@@ -174,13 +174,13 @@ exports.showEditProduct = (req, res) => {
                         <title>Productos</title>
                     </head>
                     <body>
-                        ${navBarHTML}
                 `;
         html += `
                     <div class="header">
                         <a href="/"><img src="/images/home.png" alt="home-icon"></a>
-                        <h1>Editar Producto</h1>
                     </div>
+                    ${navBarHTML}
+                    <h1>Modificar producto</h1>
                 `;
         html += '<div class="product-container">'; 
 
@@ -225,13 +225,13 @@ exports.deleteProduct = async (req, res) => {
                         <title>Productos</title>
                     </head>
                     <body>
-                        ${navBarHTML}
                 `;
         html += `
                     <div class="header">
                         <a href="/"><img src="/images/home.png" alt="home-icon"></a>
-                        <h1>Producto Eliminado</h1>
                     </div>
+                    ${navBarHTML}
+                    <h1>Detalle del producto eliminado</h1>
                 `;
         html += '<div class="product-container">'; 
  
@@ -322,15 +322,15 @@ getProductCards = (products, url) => {
                 <title>Productos</title>
             </head>
             <body>
-                ${navBarHTML}
         `;
 
     if (url == '/dashboard') {
         html += `
                     <div class="header">
                         <a href="/"><img src="/images/home.png" alt="home-icon"></a>
-                        <h1>Panel de Administración</h1>
                     </div>
+                    ${navBarHTML}
+                    <h1>Panel de Administración</h1>
                 `;
         html += '<div class="product-container">'; 
         for (let product of products) {
@@ -348,8 +348,9 @@ getProductCards = (products, url) => {
         html += `
                     <div class="header">
                         <a href="/"><img src="/images/home.png" alt="home-icon"></a>
-                        <h1>Listado de Productos</h1>
                     </div>
+                    ${navBarHTML}
+                    <h1>Listado de Productos</h1>
                 `;
         html += '<div class="product-container">'; 
         for (let product of products) {
