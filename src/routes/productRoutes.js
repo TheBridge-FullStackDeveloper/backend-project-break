@@ -26,9 +26,8 @@ router.get('/dashboard/:productId/edit', controller.showEditProduct);
 //Eliminar un producto
 router.get('/dashboard/:productId/delete', controller.deleteProduct);
 
-
-
-
+//Mostrar productos por categoría
+router.get('/categoria/:categoria', controller.showProductsByCategory);
 
 
 // Crear un nuevo producto

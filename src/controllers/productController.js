@@ -30,7 +30,12 @@ exports.showProductById = async (req, res) => {
                     <body>
                         ${navBarHTML}
                 `;
-        html += '<h1>Detalle de producto</h1>';
+        html += `
+                    <div class="header">
+                        <a href="/"><img src="/images/home.png" alt="home-icon"></a>
+                        <h1>Detalle</h1>
+                    </div>
+                `;
         html += '<div class="product-container">'; 
 
         if (req.url == '/dashboard') {
@@ -87,7 +92,13 @@ exports.showNewProduct = (req, res) => {
                     <body>
                         ${navBarHTML}
                 `;
-        html += '<h1>Añadir Nuevo Producto</h1>';
+        html += `
+                    <div class="header">
+                        <a href="/"><img src="/images/home.png" alt="home-icon"></a>
+                        <h1>Listado de Productos</h1>
+                    </div>
+                `;
+        html += '';
         html += '<div class="product-container">'; 
 
         html += `
@@ -97,13 +108,13 @@ exports.showNewProduct = (req, res) => {
                 <br><br>
                 <input type="text" id="productDescription" name="descripcion" placeholder="Descripción">
                 <br><br>
-                <input type="text" id="productImage" name="imagen" placeholder="Imagen">
-                <br><br>
                 <input type="text" id="productCategory" name="categoria" placeholder="Categoría">
                 <br><br>
                 <input type="text" id="productSize" name="talla" placeholder="Talla">
                 <br><br>
                 <input type="text" id="productPrice" name="precio" placeholder="Precio">
+                <br><br>
+                <input type="text" id="productImage" name="imagen" placeholder="Imagen">
                 <br><br>
                 <button class="update" type="submit">Crear Producto</button>
             </form>
@@ -134,7 +145,6 @@ exports.createProduct= async (req, res) => {
     }
 };
 
-
 //Actualizar un producto
 exports.updateProduct = async (req, res) => {
     try {
@@ -153,7 +163,6 @@ exports.showEditProduct = (req, res) => {
     try {
         const navBarHTML = getNavBar();
         const productId = req.params.productId;
-        console.log(productId)
         if (!productId) {
             return res.status(404).send('Producto no encontrado');
         }
@@ -167,7 +176,12 @@ exports.showEditProduct = (req, res) => {
                     <body>
                         ${navBarHTML}
                 `;
-        html += '<h1>Editar producto</h1>';
+        html += `
+                    <div class="header">
+                        <a href="/"><img src="/images/home.png" alt="home-icon"></a>
+                        <h1>Editar Producto</h1>
+                    </div>
+                `;
         html += '<div class="product-container">'; 
 
         html += `
@@ -176,8 +190,6 @@ exports.showEditProduct = (req, res) => {
                 <input type="text" id="productName" name="productName" placeholder="Nombre">
                 <br><br>
                 <input type="text" id="productDescription" name="productDescription" placeholder="Descripción">
-                <br><br>
-                <input type="text" id="productCategory" name="productCategory" placeholder="Categoría">
                 <br><br>
                 <input type="text" id="productSize" name="productSize" placeholder="Talla">
                 <br><br>
@@ -215,7 +227,12 @@ exports.deleteProduct = async (req, res) => {
                     <body>
                         ${navBarHTML}
                 `;
-        html += '<h1>Producto eliminado</h1>';
+        html += `
+                    <div class="header">
+                        <a href="/"><img src="/images/home.png" alt="home-icon"></a>
+                        <h1>Producto Eliminado</h1>
+                    </div>
+                `;
         html += '<div class="product-container">'; 
  
         html += `
@@ -226,7 +243,7 @@ exports.deleteProduct = async (req, res) => {
                 <p><b>Categoría: </b>${product.categoria}</p>
                 <p><b>Talla: </b>${product.talla}</p>
                 <p><b>Precio: </b>${product.precio}€</p>
-                <a class="home" href="/">Inicio</a>
+                <a class="home" href="/">Volver</a>
             </div>
         `;
 
@@ -241,6 +258,20 @@ exports.deleteProduct = async (req, res) => {
     }
 }
 
+//Mostrar productos por categoría
+exports.showProductsByCategory = async (req, res) => {
+    const categoria = req.params.categoria;
+
+    try {
+        const products = await Product.find({ categoria: categoria });
+        let html = getProductCards(products, req.url);
+        res.setHeader('Content-Type', 'text/html');
+        res.send(html);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Error al obtener los productos por categoría');
+    }
+}
 //Cargar estilos HTML
 baseHtml = () => {
     let html = `
@@ -249,6 +280,7 @@ baseHtml = () => {
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
             <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-e+ZQ1+OeoCz0DMQgDX2t3jKOQFWRaD/jm2xvjJvIM2hg7vMTZ6ayYEeDm4lM/XJXHXT1XLyDlU8cVKuVfyCtLQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
             <link rel="stylesheet" type="text/css" href="/styles.css">
     `;
     return html;
@@ -266,7 +298,7 @@ getNavBar = () => {
 
             categorias.forEach(categoria => {
                 html += `
-                        <li><a href="/products?categoria=${categoria}">${categoria}</a></li>
+                        <li><a href="/categoria/${categoria}">${categoria}</a></li>
                 `;
             });
 
@@ -294,7 +326,12 @@ getProductCards = (products, url) => {
         `;
 
     if (url == '/dashboard') {
-        html += '<h1>Panel de administración</h1>';
+        html += `
+                    <div class="header">
+                        <a href="/"><img src="/images/home.png" alt="home-icon"></a>
+                        <h1>Panel de Administración</h1>
+                    </div>
+                `;
         html += '<div class="product-container">'; 
         for (let product of products) {
             html += `
@@ -308,7 +345,12 @@ getProductCards = (products, url) => {
             `;
         }
     } else {
-        html += '<h1>Lista de Productos</h1>';
+        html += `
+                    <div class="header">
+                        <a href="/"><img src="/images/home.png" alt="home-icon"></a>
+                        <h1>Listado de Productos</h1>
+                    </div>
+                `;
         html += '<div class="product-container">'; 
         for (let product of products) {
             html += `

@@ -49,22 +49,9 @@ body {
     font-family: "Montserrat", sans-serif;
 }
 
-h1 {
-    text-align: center;
-    height: 80px;
-    margin-bottom: 36px;
-    background: #000;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: default;
-    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
-}
-
 nav {
     padding: 16px 32px;
-    background: #e4e4e4;
+    background: #000;
 }
 
 .barra-navegacion {
@@ -74,11 +61,43 @@ nav {
 
 .barra-navegacion a {
     text-decoration: none;
-    color: #000;
+    color: #fff;
 }
 
 .barra-navegacion a:hover {
     color: #9e4dbb;
+}
+
+.header {
+    height: 80px;
+    margin-bottom: 36px;
+    background: #e4e4e4;
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+    cursor: default;
+}
+
+.header img {
+    width: 22px;
+    height: 22px;
+}
+
+.header a {
+    height: 24px;
+}
+
+.header h1 {
+    text-align: center;
+    font-size: 22px;
+    margin-left: 16px;
+}
+
+.header h1 a {
+    text-decoration: none;
+    color: #fff;
 }
 
 .product-container {
@@ -111,20 +130,21 @@ nav {
 }
 
 .product-container form .update {
-    background: #62e06f;
+    background: #fff;
+    color: #62e06f;
+    border: 1px solid #62e06f;
     padding: 8px 16px;
     width: 32%;
     text-align: center;
     text-decoration: none;
-    color: #fff;
-    border: none;
     cursor: pointer;
     border-radius: 4px;
     margin-top: 16px;
 }
 
 .product-container form .update:hover {
-    background: #4ca255;
+    background: #62e06f;
+    color: #fff;
 }
 
 .product-card {
@@ -163,33 +183,45 @@ nav {
 }
 
 .product-card .detail {
-    background: #62b6e0;
+    background: #fff;
+    border: 1px solid #62b6e0;
+    color: #62b6e0;
 }
 
 .product-card .detail:hover {
     background: #4c97bd;
+    color: #fff;
 }
 
 .product-card .edit {
-    background: #62e06f;
+    background: #fff;
+    border: 1px solid #62e06f;
+    color: #62e06f;
 }
 
 .product-card .edit:hover {
-    background: #4ca255;
+    background: #62e06f;
+    color: #fff;
 }
 
 .product-card .delete {
-    background: #e06262;
+    background: #fff;
+    border: 1px solid #e06262;
+    color: #e06262;
 }
 
 .product-card .delete:hover {
-    background: #b94b4b;
+    background: #e06262;
+    color: #fff;
 }
 
 .product-card .home {
-    background: #dde062;
+    background: #fff;
+    border: 1px solid #dde062;
+    color: #dde062;
 }
 
 .product-card .home:hover {
-    background: #bdbf4f;
+    background: #dde062;
+    color: #fff;
 }
