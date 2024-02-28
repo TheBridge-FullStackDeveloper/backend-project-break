@@ -164,6 +164,7 @@ h1 {
 .product-container form .update:hover {
     background: #62e06f;
     color: #fff;
+    border: 1px solid #62e06f;
 }
 
 .product-card {
@@ -203,15 +204,18 @@ h1 {
     margin-top: 16px;
 }
 
-.product-card .detail {
+.product-card .detail,
+.form-users .register {
     background: #fff;
-    border: 1px solid #62b6e0;
-    color: #62b6e0;
+    border: 1px solid #0b6ccb;
+    color: #0b6ccb;
 }
 
-.product-card .detail:hover {
-    background: #4c97bd;
+.product-card .detail:hover,
+.form-users .register:hover {
+    background: #0b6ccb;
     color: #fff;
+    border: 1px solid #0b6ccb
 }
 
 .product-card .edit {
@@ -223,6 +227,7 @@ h1 {
 .product-card .edit:hover {
     background: #62e06f;
     color: #fff;
+    border: 1px solid #62e06f;
 }
 
 .product-card .delete {
@@ -234,6 +239,7 @@ h1 {
 .product-card .delete:hover {
     background: #e06262;
     color: #fff;
+    border: 1px solid #e06262;
 }
 
 .add {
@@ -254,5 +260,110 @@ h1 {
 .product-card .home:hover,
 .add:hover {
     background: #dde062;
+    color: #fff;
+    border: 1px solid #dde062;
+}
+
+.registro {
+    display: flex;
+    justify-content: center;
+    background-image: linear-gradient(to top, #670f6f, #b2205a, #d65f3f, #d8a237, #bde26a);
+    height: 100%;
+}
+
+.form-users {
+    width: 42%;
+    padding: 54px 32px;
+    border-radius: 4px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.form-users h1 {
+    text-align: center;
+    font-size: 16px;
+    margin-bottom: 36px;
+    background: #fff;
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
+}
+
+.form-users input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: none;
+    background: #eaeaea;
+}
+
+.form-users input:focus,
+.form-usersinput:active {
+    background: #a4a4a461;
+}
+
+.form-users .buttons {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-users .register {
+    padding: 8px 16px;
+    width: 52%;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 16px;
+}
+
+.form-users .passwordError,
+.form-users .error-message-username,
+.form-users .error-message-password {
+    color: #db5757;
+    width: 100%;
+    margin-top: 8px;
+    margin-bottom: 0px;
+    font-size: 12px;
+}
+
+.form-users h2, 
+.form-users p {
+    margin-bottom: 32px;
+}
+
+.form-users h2 {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.form-users .login {
+    padding: 8px 16px;
+    width: 52%;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 4px;
+    border: 1px solid #000;
+    background: #fff;
+    color: #000;
+}
+
+.form-users .login:hover {
+    border: 1px solid #000;
+    background: #000;
     color: #fff;
 }

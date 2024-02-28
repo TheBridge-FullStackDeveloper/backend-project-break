@@ -1,7 +1,6 @@
 const { initializeApp } = require('firebase/app');
-const { getDatabase, ref, onValue } = require('firebase/database');
 
-// Configuración de tu proyecto de Firebase
+// Parámetros de configuración del proyecto
 const firebaseConfig = {
     apiKey: "AIzaSyAuH2ML1GKE41wtdNlGV-f-iX9s20FojOc",
     authDomain: "proyecto-tienda-21fae.firebaseapp.com",
@@ -13,13 +12,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const database = getDatabase(app);
 
-// Referencia a la raíz de la base de datos
-const rootRef = ref(database);
-
-// Escucha los cambios en los datos
-onValue(rootRef, (snapshot) => {
-    const data = snapshot.val();
-    console.log("Datos de la base de datos:", data);
-});
+exports.module = {
+    app
+};

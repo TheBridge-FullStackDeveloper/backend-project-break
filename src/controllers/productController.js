@@ -282,9 +282,11 @@ exports.showProductsByCategory = async (req, res) => {
 //Cargar estilos HTML
 baseHtml = () => {
     let html = `
-    <html>
+    <!DOCTYPE html>
+    <html lang="es">
         <head>
-            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
             <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
             <link rel="stylesheet" type="text/css" href="/styles.css">
@@ -309,6 +311,7 @@ getNavBar = () => {
             });
 
             html += `
+                        <li><a href="/login/">Login</a></li>
                     </ul>
                 </nav>
             `;
