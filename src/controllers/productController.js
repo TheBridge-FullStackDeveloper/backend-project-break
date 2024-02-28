@@ -1,5 +1,7 @@
 const Product = require('../models/Product');
 
+
+
 //Mostrar todos los productos
 exports.showProducts = async (req, res) => {
     try {
@@ -47,7 +49,7 @@ exports.showProductById = async (req, res) => {
                     <p>${product.descripcion}</p>
                     <p><b>Categoría: </b>${product.categoria}</p>
                     <p><b>Talla: </b>${product.talla}</p>
-                    <p><b>Precio: </b>${product.precio}€</p>
+                    <p><b>Precio: </b>${product.precio.toFixed(2)}.toFixed()€</p>
                 </div>
             `;
             
@@ -60,7 +62,7 @@ exports.showProductById = async (req, res) => {
                     <p>${product.descripcion}</p>
                     <p><b>Categoría: </b>${product.categoria}</p>
                     <p><b>Talla: </b>${product.talla}</p>
-                    <p><b>Precio: </b>${product.precio}€</p>
+                    <p><b>Precio: </b>${product.precio.toFixed(2)}€</p>
                     <a class="edit" href="/dashboard/${product._id}/edit">Modificar</a>
                     <a class="delete" href="/dashboard/${product._id}/delete">Eliminar</a>
                 </div>
@@ -150,18 +152,7 @@ exports.createProduct = async (req, res) => {
     }
 };
 
-//Actualizar un producto
-exports.updateProduct = async (req, res) => {
-    try {
-        const updatedProduct = await Product.findByIdAndUpdate(req.params.productId, req.body, { new: true });
 
-        // Redirige a alguna ruta después de la actualización, por ejemplo, el dashboard
-        res.redirect('/dashboard');
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error interno del servidor');
-    }
-};
 
 //Mostrar formulario de actualización producto
 exports.showEditProduct = async (req, res) => {
@@ -191,15 +182,15 @@ exports.showEditProduct = async (req, res) => {
         html += '<div class="product-container show-product">'; 
 
         html += `
-            <form action="/dashboard/${productId}" method="POST">
-                <input type="hidden" name="productId" value="<%= productId %>">
-                <input type="text" id="productName" name="productName" placeholder=${product.nombre}>
+            <form action="/dashboard/${productId}?_method=PUT" method="POST">
+                <input type="hidden" name="productId" value="${productId}">
+                <input type="text" id="productName" name="productName" placeholder="${product.nombre}">
                 <br><br>
-                <input type="text" id="productDescription" name="productDescription" placeholder=${product.descripcion}>
+                <input type="text" id="productDescription" name="productDescription" placeholder="${product.descripcion}">
                 <br><br>
-                <input type="text" id="productSize" name="productSize" placeholder=${product.talla}>
+                <input type="text" id="productSize" name="productSize" placeholder="${product.talla}">
                 <br><br>
-                <input type="text" id="productPrice" name="productPrice" placeholder=${product.precio}>
+                <input type="text" id="productPrice" name="productPrice" placeholder="${product.precio.toFixed(2)}">
                 <br><br>
                 <input type="file" id="productImagen" name="productImagen" accept="image/*">
                 <button class="update" type="submit">Actualizar</button>
@@ -210,6 +201,35 @@ exports.showEditProduct = async (req, res) => {
         html += '</body></html>';
         res.setHeader('Content-Type', 'text/html');
         res.send(html);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error interno del servidor');
+    }
+};
+
+//Actualizar un producto
+exports.updateProduct = async (req, res) => {
+    console.log("BODY", req.body);
+    try {
+        const productId = req.params.productId;
+        let { productName, productDescription, productSize, productPrice, productImagen } = req.body;
+
+        console.log("Camiseta", productImagen, typeof(productName))
+        // Obtenemos el producto existente
+        let existingProduct = await Product.findById(productId);
+        console.log("existingProduct", existingProduct)
+
+        // Si alguno de los campos no se modificó, conservamos los datos existentes
+        if (!productName) productName = existingProduct.nombre;
+        if (!productDescription) productDescription = existingProduct.descripcion;
+        if (!productSize)  productSize = existingProduct.talla;
+        if (!productPrice) productPrice = existingProduct.precio;
+
+        // Actualizamos el producto con los nuevos datos
+        const updatedProduct = await Product.findByIdAndUpdate(productId, { nombre: productName, descripcion: productDescription, talla: productSize.toUpperCase(), precio: productPrice } , { new: true });
+        console.log("PRODUCTO", updatedProduct);
+        // Redirige a alguna ruta después de la actualización, por ejemplo, el dashboard
+        res.redirect('/dashboard');
     } catch (error) {
         console.error(error);
         res.status(500).send('Error interno del servidor');
@@ -249,7 +269,7 @@ exports.deleteProduct = async (req, res) => {
                 <p>${product.descripcion}</p>
                 <p><b>Categoría: </b>${product.categoria}</p>
                 <p><b>Talla: </b>${product.talla}</p>
-                <p><b>Precio: </b>${product.precio}€</p>
+                <p><b>Precio: </b>${product.precio.toFixed(2)}€</p>
                 <a class="home" href="/">Volver</a>
             </div>
         `;

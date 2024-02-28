@@ -14,9 +14,7 @@ const ProductSchema = new mongoose.Schema({
         enum: ['S', 'M', 'L', 'XL'], 
         required: [true, 'Es necesaria informar de talla de la prenda según S, M, L, XL']
     },
-    precio: {
-        type: mongoose.Types.Decimal128
-    }
+    precio: Number
 }, { timestamps: true });
 
 const Product = mongoose.model('Product', ProductSchema);

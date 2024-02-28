@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const controller = require('../controllers/productController');
+const methodOverride = require('method-override');
+router.use(methodOverride('_method'));
 
 //Mostrar todos los productos
 router.get('/', controller.showProducts);
@@ -21,6 +23,9 @@ router.get('/dashboard', controller.showProducts);
 
 //Mostrar formulario de actualización producto
 router.get('/dashboard/:productId/edit', controller.showEditProduct);
+
+//Actualización producto
+router.put('/dashboard/:productId', controller.updateProduct)
 
 //Eliminar un producto
 router.get('/dashboard/:productId/delete', controller.deleteProduct);
