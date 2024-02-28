@@ -6,10 +6,11 @@ require('dotenv').config();
 
 //Rutas
 const routes = require('./routes/productRoutes');
+const routesAuth = require('./routes/authRoutes');
 
+app.use('/register', routesAuth);
 //Conexión a BD
 const { dbConnection } = require('./config/db');
-const { firebaseConfig, database } = require('./config/firebase');
 
 const PORT = process.env.PORT || 3000;
 
@@ -18,6 +19,7 @@ app.use(bodyParser.json());
 app.use(express.json());
 
 app.use('/', routes);
+app.use(routesAuth);
 
 //Assets y estilos CSS
 const publicPath = path.resolve(__dirname, '..', 'public');
