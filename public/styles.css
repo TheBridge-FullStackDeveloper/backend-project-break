@@ -98,6 +98,13 @@ h1 {
     cursor: default;
 }
 
+.button {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 36px;
+}
+
 .product-container {
     width: 80%;
     display: flex;
@@ -220,13 +227,23 @@ h1 {
     color: #fff;
 }
 
-.product-card .home {
+.add {
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.product-card .home,
+.add {
     background: #fff;
     border: 1px solid #dde062;
     color: #dde062;
 }
 
-.product-card .home:hover {
+.product-card .home:hover,
+.add:hover {
     background: #dde062;
     color: #fff;
 }
