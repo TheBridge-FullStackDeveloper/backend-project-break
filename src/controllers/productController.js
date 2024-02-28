@@ -89,9 +89,11 @@ function getProductOneCard(product) {
 const ProductController = {
     async showProducts(req, res) {
         try {
-            // controlar con dashboard
-                
+            // controlar con dashboard                
             const products = await Product.find();
+            if(!products){
+                throw new Error('error de busqueda de productos')
+            }
             const productCards = getProductCards(products, token);
             const html = htmlHead + getNavBar() + productCards + htmlEnd
             res.send(html);
@@ -184,6 +186,9 @@ const ProductController = {
     async createProduct(req, res) {
 
         const product = await Product.create({ ...req.body });
+        if(!product){
+            throw new Error('Error al añadir un articulo')
+        }
         res.redirect('/dashboard');
 
     },
