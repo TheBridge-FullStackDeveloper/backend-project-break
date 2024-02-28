@@ -9,6 +9,7 @@ const routes = require('./routes/productRoutes');
 
 //Conexión a BD
 const { dbConnection } = require('./config/db');
+const { firebaseConfig, database } = require('./config/firebase');
 
 const PORT = process.env.PORT || 3000;
 
