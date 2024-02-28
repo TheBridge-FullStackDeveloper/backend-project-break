@@ -106,10 +106,19 @@ h1 {
 }
 
 .product-container {
+    width: 82%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: flex-start;
+    margin: 0 auto;
+}
+
+.product-container.show-product {
     width: 80%;
     display: flex;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 12px;
     justify-content: space-evenly;
     margin: 0 auto;
 }

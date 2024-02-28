@@ -36,7 +36,7 @@ exports.showProductById = async (req, res) => {
                     ${navBarHTML}
                     <h1>Detalle</h1>
                 `;
-        html += '<div class="product-container">'; 
+        html += '<div class="product-container show-product">'; 
 
         if (req.url == '/dashboard') {
             
@@ -129,7 +129,7 @@ exports.formNewProduct = (req, res) => {
 exports.createProduct = async (req, res) => {
     try {
         const { productName, productDescription, productCategory, productSize, productPrice, productImagen } = req.body;
-        
+
         // Crea un nuevo producto sin especificar el _id
         const newProduct = new Product({
             nombre: productName,
@@ -137,7 +137,7 @@ exports.createProduct = async (req, res) => {
             categoria: productCategory.toLowerCase().replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); }),
             talla: productSize.toUpperCase(),
             precio: productPrice,
-            imagen: productImagen
+            imagen: '/images/'+productImagen
         });
 
         // Guarda el nuevo producto en la base de datos
@@ -188,7 +188,7 @@ exports.showEditProduct = async (req, res) => {
                     ${navBarHTML}
                     <h1>Modificar producto</h1>
                 `;
-        html += '<div class="product-container">'; 
+        html += '<div class="product-container show-product">'; 
 
         html += `
             <form action="/dashboard/${productId}" method="POST">
@@ -201,6 +201,7 @@ exports.showEditProduct = async (req, res) => {
                 <br><br>
                 <input type="text" id="productPrice" name="productPrice" placeholder=${product.precio}>
                 <br><br>
+                <input type="file" id="productImagen" name="productImagen" accept="image/*">
                 <button class="update" type="submit">Actualizar</button>
             </form>
         `;
@@ -239,7 +240,7 @@ exports.deleteProduct = async (req, res) => {
                     ${navBarHTML}
                     <h1>Detalle del producto eliminado</h1>
                 `;
-        html += '<div class="product-container">'; 
+        html += '<div class="product-container show-product">'; 
  
         html += `
             <div class="product-card">
