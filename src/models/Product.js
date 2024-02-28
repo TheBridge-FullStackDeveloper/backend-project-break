@@ -6,12 +6,12 @@ const ProductSchema = new mongoose.Schema({
     imagen: String,
     categoria: {
         type: String,
-        enum: ["Camisetas", "Pantalones", "Zapatos", "Accesorios"], // Opciones de selecciona válidas para Categoria
+        enum: ["Camisetas", "Pantalones", "Zapatos", "Accesorios"], 
         required: [true, 'Es necesaria informar de categoría de la prenda según Camisetas, Pantalones, Zapatos, Accesorios']
     },
     talla: {
         type: String,
-        enum: ['S', 'M', 'L', 'XL'], // Opciones de selecciona válidas para la talla
+        enum: ['S', 'M', 'L', 'XL'], 
         required: [true, 'Es necesaria informar de talla de la prenda según S, M, L, XL']
     },
     precio: {

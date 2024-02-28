@@ -78,11 +78,9 @@ exports.showProductById = async (req, res) => {
 }
 
 // Devuelve la vista con el formulario para subir un artículo nuevo.
-
-exports.showNewProduct = (req, res) => {
+exports.formNewProduct = (req, res) => {
     try {
         const navBarHTML = getNavBar();
-        
         let html = `
                 <html>
                     <head>
@@ -96,27 +94,24 @@ exports.showNewProduct = (req, res) => {
                         <a href="/"><img src="/images/home.png" alt="home-icon"></a>
                     </div>
                     ${navBarHTML}
-                    <h1>Listado de productos</h1>
+                    <h1>Crear nuevo producto</h1>
                 `;
-        html += '';
         html += '<div class="product-container">'; 
 
         html += `
             <form action="/dashboard" method="POST">
-                <input type="hidden" name="productId" value="<%= productId %>">
-                <input type="text" id="productName" name="nombre" placeholder="Nombre">
+                <input type="text" id="productName" name="productName" placeholder="Nombre">
                 <br><br>
-                <input type="text" id="productDescription" name="descripcion" placeholder="Descripción">
+                <input type="text" id="productDescription" name="productDescription" placeholder="Descripción">
                 <br><br>
-                <input type="text" id="productCategory" name="categoria" placeholder="Categoría">
+                <input type="text" id="productCategory" name="productCategory" placeholder="Categoría">
                 <br><br>
-                <input type="text" id="productSize" name="talla" placeholder="Talla">
+                <input type="text" id="productSize" name="productSize" placeholder="Talla">
                 <br><br>
-                <input type="text" id="productPrice" name="precio" placeholder="Precio">
+                <input type="text" id="productPrice" name="productPrice" placeholder="Precio">
                 <br><br>
-                <input type="text" id="productImage" name="imagen" placeholder="Imagen">
-                <br><br>
-                <button class="update" type="submit">Crear Producto</button>
+                <input type="file" id="productImagen" name="productImagen" accept="image/*">
+                <button class="update" type="submit">Crear</button>
             </form>
         `;
             
@@ -131,17 +126,27 @@ exports.showNewProduct = (req, res) => {
 };
 
 //Crear nuevo producto
-exports.createProduct= async (req, res) => {
-    const NewProduct = req.body
+exports.createProduct = async (req, res) => {
     try {
-        const productDB = new Product(NewProduct);
-        await productDB.save()
-        res.redirect("/dashboard")
+        const { productName, productDescription, productCategory, productSize, productPrice, productImagen } = req.body;
+        
+        // Crea un nuevo producto sin especificar el _id
+        const newProduct = new Product({
+            nombre: productName,
+            descripcion: productDescription,
+            categoria: productCategory.toLowerCase().replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); }),
+            talla: productSize.toUpperCase(),
+            precio: productPrice,
+            imagen: productImagen
+        });
+
+        // Guarda el nuevo producto en la base de datos
+        await newProduct.save();
+
+        res.redirect('/');
     } catch (error) {
-        console.error(error);
-        res
-            .status(500)
-            .send({ message: "Error al crear un nuevo producto" });
+        console.error('Error al crear el producto:', error);
+        res.status(500).send('Error interno del servidor');
     }
 };
 
@@ -159,10 +164,11 @@ exports.updateProduct = async (req, res) => {
 };
 
 //Mostrar formulario de actualización producto
-exports.showEditProduct = (req, res) => {
+exports.showEditProduct = async (req, res) => {
     try {
         const navBarHTML = getNavBar();
         const productId = req.params.productId;
+        const product = await Product.findById(req.params.productId);
         if (!productId) {
             return res.status(404).send('Producto no encontrado');
         }
@@ -187,13 +193,13 @@ exports.showEditProduct = (req, res) => {
         html += `
             <form action="/dashboard/${productId}" method="POST">
                 <input type="hidden" name="productId" value="<%= productId %>">
-                <input type="text" id="productName" name="productName" placeholder="Nombre">
+                <input type="text" id="productName" name="productName" placeholder=${product.nombre}>
                 <br><br>
-                <input type="text" id="productDescription" name="productDescription" placeholder="Descripción">
+                <input type="text" id="productDescription" name="productDescription" placeholder=${product.descripcion}>
                 <br><br>
-                <input type="text" id="productSize" name="productSize" placeholder="Talla">
+                <input type="text" id="productSize" name="productSize" placeholder=${product.talla}>
                 <br><br>
-                <input type="text" id="productPrice" name="productPrice" placeholder="Precio">
+                <input type="text" id="productPrice" name="productPrice" placeholder=${product.precio}>
                 <br><br>
                 <button class="update" type="submit">Actualizar</button>
             </form>
@@ -325,13 +331,17 @@ getProductCards = (products, url) => {
 
     if (url == '/dashboard') {
         html += `
-                    <div class="header">
-                        <a href="/"><img src="/images/home.png" alt="home-icon"></a>
-                    </div>
-                    ${navBarHTML}
-                    <h1>Panel de Administración</h1>
-                `;
-        html += '<div class="product-container">'; 
+            <div class="header">
+                <a href="/"><img src="/images/home.png" alt="home-icon"></a>
+            </div>
+            ${navBarHTML}
+            <h1>Panel de Administración</h1>
+            <div class="button">
+                <a class="add" href="/dashboard/new">Añadir Producto</a>
+            </div>
+            <div class="product-container">
+        `;
+   
         for (let product of products) {
             html += `
                 <div id="product-card" class="product-card">
@@ -345,13 +355,14 @@ getProductCards = (products, url) => {
         }
     } else {
         html += `
-                    <div class="header">
-                        <a href="/"><img src="/images/home.png" alt="home-icon"></a>
-                    </div>
-                    ${navBarHTML}
-                    <h1>Listado de Productos</h1>
-                `;
-        html += '<div class="product-container">'; 
+            <div class="header">
+                <a href="/"><img src="/images/home.png" alt="home-icon"></a>
+            </div>
+            ${navBarHTML}
+            <h1>Listado de Productos</h1>
+            <div class="product-container">
+        `;
+
         for (let product of products) {
             html += `
                 <div id="product-card" class="product-card">
@@ -368,33 +379,3 @@ getProductCards = (products, url) => {
     return html;
 }
 
-/*
-const ProductController = {
-    async showProducts(req, res) {
-        try {
-            const products = await Product.find()
-            res.json(products)
-        } catch (error) {
-            res.status(500).json({ mensaje: 'Servidor no disponible' });
-        }
-    },
-    async showProductById (req, res) {
-        try {
-            const product = await Product.findById(req.params.productId);
-            if (!product) {
-                return res.status(404).json({ mensaje: 'No se ha podido encontrar el producto solicitado' });
-            }
-            res.json(product)
-        } catch (error) {
-            res.status(500).json({ mensaje: 'Servidor no disponible' });
-        }
-    },
-    async showDashboard (req, res) {
-        try {
-            res.render('dashboard', { Product })
-        } catch (error) {
-            res.status(500).json({ mensaje: 'Servidor no disponible' });
-        }
-    }
-}
-*/

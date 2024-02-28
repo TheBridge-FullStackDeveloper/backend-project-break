@@ -1,24 +1,23 @@
 const express = require("express");
 const router = express.Router();
 const controller = require('../controllers/productController');
-const verificarAutenticacion = require('../middlewares/authMiddleware');
 
 //Mostrar todos los productos
 router.get('/', controller.showProducts);
 router.get('/products', controller.showProducts);
+
+//Devuelve el formulario para subir un artículo nuevo.
+router.get('/dashboard/new', controller.formNewProduct);
+
+// Crear un nuevo producto
+router.post("/dashboard", controller.createProduct)
 
 //Devolver el detalle de un producto
 router.get('/products/:productId', controller.showProductById);
 router.get('/dashboard/:productId', controller.showProductById);
 
 //Devuelve el dashboard del administrador con todos los productos
-router.get('/dashboard', verificarAutenticacion, controller.showProducts);
-
-//Devuelve el formulario para subir un artículo nuevo.
-router.get('/new', controller.showNewProduct);
-
-// Crear un nuevo producto
-router.post("/dashboard", controller.createProduct)
+router.get('/dashboard', controller.showProducts);
 
 //Mostrar formulario de actualización producto
 router.get('/dashboard/:productId/edit', controller.showEditProduct);
