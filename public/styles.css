@@ -130,12 +130,20 @@ table {
 }
 
 /*---------*/
+<<<<<<< HEAD
 body {
     font-family: "Poppins", sans-serif;
     font-weight: 400;
     font-style: normal;
 }
 
+=======
+body{
+    font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+>>>>>>> testing
 a {
     text-decoration: none;
 }
@@ -145,8 +153,13 @@ img {
     height: 300px;
 }
 
+<<<<<<< HEAD
 h2 {
     font-size: 16px;
+=======
+h2{
+    font-size: 16px;    
+>>>>>>> testing
     font-weight: bold;
     text-align: center;
 }
@@ -155,7 +168,11 @@ h2 {
     display: flex;
     justify-content: center;
     padding: 15px;
+<<<<<<< HEAD
     background-color: #062ACD;
+=======
+    background-color: #062acd;
+>>>>>>> testing
     gap: 15px;
     margin-bottom: 15px;
 }
@@ -179,12 +196,22 @@ h2 {
     width: 300px;
     padding: 10px;
     gap: 5px;
+<<<<<<< HEAD
     -webkit-box-shadow: 6px 6px 5px 0px rgba(128, 126, 128, 1);
     -moz-box-shadow: 6px 6px 5px 0px rgba(128, 126, 128, 1);
     box-shadow: 6px 6px 5px 0px rgba(128, 126, 128, 1);
 }
 
 .formContainer {
+=======
+    -webkit-box-shadow: 6px 6px 5px 0px rgba(128,126,128,1);
+    -moz-box-shadow: 6px 6px 5px 0px rgba(128,126,128,1);
+    box-shadow: 6px 6px 5px 0px rgba(128,126,128,1);
+}
+
+
+.formContainer{
+>>>>>>> testing
     display: flex;
     justify-content: center;
 }
@@ -212,19 +239,33 @@ select {
     border-radius: 10px;
     padding: 5px;
 }
+<<<<<<< HEAD
 
 .containerBoton {
+=======
+.containerBoton{
+>>>>>>> testing
     display: flex;
     justify-content: center;
     gap: 10px;
 }
 
+<<<<<<< HEAD
 .boton {
     padding: 8px;
     background-color: #1239ff;
+=======
+.boton{
+    padding: 8px;
+    background-color:#1239ff;
+>>>>>>> testing
     color: #fff;
     border-radius: 10px;
     text-align: center;
     border: none;
     width: 100px;
+<<<<<<< HEAD
+=======
+    
+>>>>>>> testing
 }

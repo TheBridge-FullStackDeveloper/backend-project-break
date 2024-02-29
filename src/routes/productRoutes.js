@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const ProductController = require('../controllers/productController.js');
-const  verifyToken = require('../middlewares/authControl.js')
-let token;
+const {ProductController} = require('../controllers/productController.js');
 
 router.get('/', ProductController.showProducts);
 router.get('/products', ProductController.showProducts);

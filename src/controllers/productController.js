@@ -7,6 +7,9 @@ const htmlHead = `<!DOCTYPE html>
                     <meta charset="UTF-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <link rel="stylesheet" href="/styles.css">
+                    <link rel="preconnect" href="https://fonts.googleapis.com">
+                    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
                     <title>Document</title>
                 </head>
                 <body>`;
@@ -38,7 +41,9 @@ function getNavBar() {
 }
 
 function getProductCards(products) {
-    
+    if (!products){
+        throw new Error ('El producto esta vacio o nulo')
+    }
     let option;
     let html = `<div class="cardContainer">`;
     if (token){option = 'dashboard'}else{option = 'products'}
@@ -46,9 +51,10 @@ function getProductCards(products) {
         html += `
         <div class="productCard">
         <h2>${product.name}</h2>
-        <img src="${product.image}" alt="${product.name}">        
+        <img src="${product.image}" alt="${product.name}">      
+        <div class="containerBoton">   
         <a href="/${option}/${product._id}" class="boton">Ver detalle</a>    
-           
+        </div>
         </div>           
         `
     }
@@ -56,20 +62,24 @@ function getProductCards(products) {
 }
 
 function getProductOneCard(product) {
-    
+    if(!product){
+        throw new Error ('El producto esta vacio o nulo')
+    }
     let html = `<div class="cardContainer">
         <div class="productCard">
             <h2>${product.name}</h2>
-            <img src="${product.image}" alt="${product.name}">        
+            <img src="${product.image}" alt="${product.name}">
             <p>${product.description}</p>
             <p>Precio: ${product.price}€</p>
             <p>Talla: ${product.size.toString().toUpperCase()}</p>
             <p>Categoria: ${product.category}</p>
             `
     if (token){
-        html += `        
+        html += ` 
+            <div class="containerBoton">       
             <a href="/dashboard/${product._id}/edit" class="boton">actualizar</a>
-            <a href="/dashboard/${product._id}/delete" class="boton">eliminar</a>                          
+            <a href="/dashboard/${product._id}/delete" class="boton">eliminar</a> 
+            </div>                         
          `
     }
     
@@ -79,9 +89,11 @@ function getProductOneCard(product) {
 const ProductController = {
     async showProducts(req, res) {
         try {
-            // controlar con dashboard
-                
+            // controlar con dashboard                
             const products = await Product.find();
+            if(!products){
+                throw new Error('error de busqueda de productos')
+            }
             const productCards = getProductCards(products, token);
             const html = htmlHead + getNavBar() + productCards + htmlEnd
             res.send(html);
@@ -94,6 +106,7 @@ const ProductController = {
         try {
             // controlar con dashboard
             const idProduct = req.params.productId;
+            
             const product = await Product.findById(idProduct);
             
             const productCards = getProductOneCard(product, token)
@@ -171,6 +184,9 @@ const ProductController = {
     async createProduct(req, res) {
 
         const product = await Product.create({ ...req.body });
+        if(!product){
+            throw new Error('Error al añadir un articulo')
+        }
         res.redirect('/dashboard');
 
     },
@@ -275,7 +291,7 @@ const ProductController = {
             const idProduct = req.params.productId;
             const deletedProduct = await Product.findByIdAndDelete(idProduct)
             if (!deletedProduct) {
-                return res.status(404).json({ mensaje: 'Product with that idProduct not found' })
+                throw new Error('Producto no encontrado')                
             }
             let message = `<h2>Producto eliminado correctamente</h2>`
             html = htmlHead + getNavBar() + message + htmlEnd
@@ -298,4 +314,8 @@ const ProductController = {
 }
 
 
-module.exports = ProductController
+module.exports = {
+    ProductController,
+    getProductOneCard,
+    getProductCards
+}
