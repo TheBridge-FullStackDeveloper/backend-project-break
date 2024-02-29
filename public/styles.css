@@ -143,6 +143,14 @@ h1 {
     background: #eaeaea;
 }
 
+.product-container form select {
+    width: 80%;
+    padding: 8px;
+    border-radius: 4px;
+    border: none;
+    background: #eaeaea;
+}
+
 .product-container form input:focus,
 .product-container form input:active {
     background: #a4a4a461;

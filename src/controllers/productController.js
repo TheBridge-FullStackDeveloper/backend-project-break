@@ -106,9 +106,21 @@ exports.formNewProduct = (req, res) => {
                 <br><br>
                 <input type="text" id="productDescription" name="productDescription" placeholder="Descripción">
                 <br><br>
-                <input type="text" id="productCategory" name="productCategory" placeholder="Categoría">
+                    <select id="productCategory" name="productCategory" >
+                        <option value="" disabled selected>Categoría</option>
+                        <option value="Camisetas">Camisetas</option>
+                        <option value="Pantalones">Pantalones</option>
+                        <option value="Zapatos">Zapatos</option>
+                        <option value="Accesorios">Accesorios</option>
+                    </select>
                 <br><br>
-                <input type="text" id="productSize" name="productSize" placeholder="Talla">
+                    <select id="productSize" name="productSize">
+                        <option value="" disabled selected>Talla</option>
+                        <option value="S" >S</option>
+                        <option value="M" >M</option>
+                        <option value="L" >L</option>
+                        <option value="XL" >XL</option>
+                    </select>
                 <br><br>
                 <input type="text" id="productPrice" name="productPrice" placeholder="Precio">
                 <br><br>
@@ -188,7 +200,13 @@ exports.showEditProduct = async (req, res) => {
                 <br><br>
                 <input type="text" id="productDescription" name="productDescription" placeholder="${product.descripcion}">
                 <br><br>
-                <input type="text" id="productSize" name="productSize" placeholder="${product.talla}">
+                    <select id="productSize" name="productSize">
+                        <option value="" disabled selected>${product.talla}</option>
+                        <option value="S" >S</option>
+                        <option value="M" >M</option>
+                        <option value="L" >L</option>
+                        <option value="XL" >XL</option>
+                    </select>
                 <br><br>
                 <input type="text" id="productPrice" name="productPrice" placeholder="${product.precio.toFixed(2)}">
                 <br><br>
