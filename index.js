@@ -1,12 +1,12 @@
 const express = require('express');
-const dbConnection = require('../src/config/db.js');
+const dbConnection = require('./src/config/db.js');
 const app = express();
 const path = require('node:path');
 
 require('dotenv').config();
 
 const PORT = process.env.PORT || 3000
-const router = require('../src/routes/productRoutes.js');
+const router = require('./src/routes/productRoutes.js');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
