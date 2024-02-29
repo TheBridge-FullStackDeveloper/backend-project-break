@@ -1,7 +1,7 @@
 const { it } = require('node:test');
-const {ProductController, getProductOneCard, getProductCards} = require('../src/controllers/productController');
+const { ProductController, getProductOneCard, getProductCards } = require('../src/controllers/productController');
 const Product = require('../src/models/Product')
-
+/*
 jest.setTimeout(30000)
 /*
 describe('ProductController', () => {
@@ -18,8 +18,8 @@ describe('ProductController', () => {
         category: 'zapatos',
         size: 'm',
         price: '25'
-    }
-
+    }*/
+/*
     describe('showProducts', () =>{
         it('should return all products', async()=>{
             await ProductController.showProducts(req, res);
@@ -33,7 +33,7 @@ describe('ProductController', () => {
             expect(res.send).toHaveBeenCalledWith(errorMessage);
         })
     })
-/*
+
     describe('showProductById', () =>{
         it('should return a product by id', async()=>{
             req.params = {productId: '65645121566'}
@@ -65,6 +65,16 @@ describe('ProductController', () => {
         })
     })
 
+/*
+describe('createProduct', () =>{    
+    it('should create a new product', async () =>{            
+        req.body = product;
+        await ProductController.createProduct(req, res);
+        expect(Product.create).toEqual(product);
+        expect(res.redirect).toEqual('/dashboard')
+    })
+})*/
+/*
     describe('updateProduct', () =>{
         it('should update a product', async() =>{
             req.params = {productId: '64643212154'};
@@ -82,23 +92,22 @@ describe('ProductController', () => {
 }); */
 
 
-
-describe('printing products', () =>{
-    it('lanza error si el producto es nulo o vacio', () =>{
+describe('printing products', () => {
+    it('lanza error si el producto es nulo o vacio', () => {
         expect(() => getProductCards('')).toThrow('El producto esta vacio o nulo')
     });
-    it('lanza error si el producto es nulo o vacio', () =>{
+    it('lanza error si el producto es nulo o vacio', () => {
         expect(() => getProductOneCard('')).toThrow('El producto esta vacio o nulo')
     });
     const product = {
-        name:'zapato',
+        name: 'zapato',
         description: 'zapato negro',
-        image:'http://imagen.com',
+        image: 'http://imagen.com',
         category: 'zapatos',
         size: 'm',
         price: '25'
     }
-    it('should print a product', () =>{
+    it('should print a product', () => {
         expect(getProductOneCard(product)).toEqual(`<div class=\"cardContainer\">
         <div class=\"productCard\">
             <h2>zapato</h2>

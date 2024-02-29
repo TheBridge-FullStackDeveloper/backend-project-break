@@ -41,12 +41,12 @@ function getNavBar() {
 }
 
 function getProductCards(products) {
-    if (!products){
-        throw new Error ('El producto esta vacio o nulo')
+    if (!products) {
+        throw new Error('El producto esta vacio o nulo')
     }
     let option;
     let html = `<div class="cardContainer">`;
-    if (token){option = 'dashboard'}else{option = 'products'}
+    if (token) { option = 'dashboard' } else { option = 'products' }
     for (let product of products) {
         html += `
         <div class="productCard">
@@ -62,8 +62,8 @@ function getProductCards(products) {
 }
 
 function getProductOneCard(product) {
-    if(!product){
-        throw new Error ('El producto esta vacio o nulo')
+    if (!product) {
+        throw new Error('El producto esta vacio o nulo')
     }
     let html = `<div class="cardContainer">
         <div class="productCard">
@@ -74,7 +74,7 @@ function getProductOneCard(product) {
             <p>Talla: ${product.size.toString().toUpperCase()}</p>
             <p>Categoria: ${product.category}</p>
             `
-    if (token){
+    if (token) {
         html += ` 
             <div class="containerBoton">       
             <a href="/dashboard/${product._id}/edit" class="boton">actualizar</a>
@@ -82,7 +82,7 @@ function getProductOneCard(product) {
             </div>                         
          `
     }
-    
+
     return html + '</div>';
 }
 
@@ -91,7 +91,7 @@ const ProductController = {
         try {
             // controlar con dashboard                
             const products = await Product.find();
-            if(!products){
+            if (!products) {
                 throw new Error('error de busqueda de productos')
             }
             const productCards = getProductCards(products, token);
@@ -106,9 +106,9 @@ const ProductController = {
         try {
             // controlar con dashboard
             const idProduct = req.params.productId;
-            
+
             const product = await Product.findById(idProduct);
-            
+
             const productCards = getProductOneCard(product, token)
 
             const html = htmlHead + getNavBar() + productCards + htmlEnd
@@ -168,23 +168,23 @@ const ProductController = {
     },
     async showProductCategory(req, res) {
         try {
-            const tipo = req.params;            
+            const tipo = req.params;
             const productCategory = await Product.find({ category: tipo.category });
             const productCards = getProductCards(productCategory);
             const html = htmlHead + getNavBar() + productCards + htmlEnd
             res.send(html);
-            
+
 
         } catch (error) {
             console.error(error)
             res.status(500).send('error de articulo nuevo')
         }
-        
+
     },
     async createProduct(req, res) {
 
         const product = await Product.create({ ...req.body });
-        if(!product){
+        if (!product) {
             throw new Error('Error al añadir un articulo')
         }
         res.redirect('/dashboard');
@@ -266,17 +266,17 @@ const ProductController = {
             const pBody = req.body
             const updateProduct = await Product.findByIdAndUpdate(
                 idProduct, {
-                    name: pBody.name,
-                    description: pBody.description,
-                    category: pBody.category,    
-                    price: pBody.price,
-                    image: pBody.image,
-                    size: pBody.size
-            }, { new: true })            
+                name: pBody.name,
+                description: pBody.description,
+                category: pBody.category,
+                price: pBody.price,
+                image: pBody.image,
+                size: pBody.size
+            }, { new: true })
             if (!updateProduct) {
                 return res.status(404).json({ mensaje: 'Product id not found' })
             }
-            
+
             res.redirect(`${idProduct}`)
 
 
@@ -291,7 +291,7 @@ const ProductController = {
             const idProduct = req.params.productId;
             const deletedProduct = await Product.findByIdAndDelete(idProduct)
             if (!deletedProduct) {
-                throw new Error('Producto no encontrado')                
+                throw new Error('Producto no encontrado')
             }
             let message = `<h2>Producto eliminado correctamente</h2>`
             html = htmlHead + getNavBar() + message + htmlEnd
@@ -302,13 +302,13 @@ const ProductController = {
             res.status(500).send('error de eliminacion articulo')
         }
     },
-    async login(req, res){
+    async login(req, res) {
         token = true;
         res.redirect('/dashboard')
     },
 
-    async logout(req, res){
-        token=false;
+    async logout(req, res) {
+        token = false;
         res.redirect('/products')
     }
 }

@@ -130,11 +130,12 @@ table {
 }
 
 /*---------*/
-body{
+body {
     font-family: "Poppins", sans-serif;
-  font-weight: 400;
-  font-style: normal;
+    font-weight: 400;
+    font-style: normal;
 }
+
 a {
     text-decoration: none;
 }
@@ -144,10 +145,9 @@ img {
     height: 300px;
 }
 
-h2{
-    font-size: 16px;    
+h2 {
+    font-size: 16px;
     font-weight: bold;
-
     text-align: center;
 }
 
@@ -155,7 +155,7 @@ h2{
     display: flex;
     justify-content: center;
     padding: 15px;
-    background-color: #062acd;
+    background-color: #062ACD;
     gap: 15px;
     margin-bottom: 15px;
 }
@@ -179,52 +179,52 @@ h2{
     width: 300px;
     padding: 10px;
     gap: 5px;
-    -webkit-box-shadow: 6px 6px 5px 0px rgba(128,126,128,1);
-    -moz-box-shadow: 6px 6px 5px 0px rgba(128,126,128,1);
-    box-shadow: 6px 6px 5px 0px rgba(128,126,128,1);
+    -webkit-box-shadow: 6px 6px 5px 0px rgba(128, 126, 128, 1);
+    -moz-box-shadow: 6px 6px 5px 0px rgba(128, 126, 128, 1);
+    box-shadow: 6px 6px 5px 0px rgba(128, 126, 128, 1);
 }
 
-
-.formContainer{
+.formContainer {
     display: flex;
     justify-content: center;
 }
 
-.formulario{
+.formulario {
     display: flex;
     flex-direction: column;
-    gap:5px;
+    gap: 5px;
     width: 300px;
     margin-top: 10px;
 }
 
-.formcategory{
+.formcategory {
     display: flex;
     flex-direction: column;
     font-size: 12px;
 }
-input{
+
+input {
     border-radius: 10px;
     padding: 5px;
 }
 
-select{
+select {
     border-radius: 10px;
     padding: 5px;
 }
-.containerBoton{
+
+.containerBoton {
     display: flex;
     justify-content: center;
     gap: 10px;
 }
 
-.boton{
+.boton {
     padding: 8px;
-    background-color:#1239ff;
+    background-color: #1239ff;
     color: #fff;
     border-radius: 10px;
     text-align: center;
     border: none;
     width: 100px;
-    
 }
