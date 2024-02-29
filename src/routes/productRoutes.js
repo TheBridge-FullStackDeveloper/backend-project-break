@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const controller = require('../controllers/productController');
 const authMiddleware = require('../middlewares/authMiddleware');
+const methodOverride = require('method-override');
+router.use(methodOverride('_method'));
 
 //Mostrar todos los productos
 router.get('/', controller.showProducts);
@@ -22,6 +24,9 @@ router.get('/dashboard', authMiddleware.checkSessionMiddleware, controller.showP
 
 //Mostrar formulario de actualización producto
 router.get('/dashboard/:productId/edit', authMiddleware.checkSessionMiddleware, controller.showEditProduct);
+
+//Actualización producto
+router.put('/dashboard/:productId', authMiddleware.checkSessionMiddleware, controller.updateProduct)
 
 //Eliminar un producto
 router.get('/dashboard/:productId/delete', authMiddleware.checkSessionMiddleware, controller.deleteProduct);
