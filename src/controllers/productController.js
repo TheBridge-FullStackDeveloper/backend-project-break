@@ -108,9 +108,7 @@ const ProductController = {
             const idProduct = req.params.productId;
             
             const product = await Product.findById(idProduct);
-            if(!product){
-                throw new Error('El producto no exite')
-            }
+            
             const productCards = getProductOneCard(product, token)
 
             const html = htmlHead + getNavBar() + productCards + htmlEnd

@@ -1,3 +1,4 @@
+const { it } = require('node:test');
 const {ProductController, getProductOneCard, getProductCards} = require('../src/controllers/productController');
 const Product = require('../src/models/Product')
 
@@ -19,18 +20,38 @@ describe('ProductController', () => {
     }
 
     describe('showProducts', () =>{
-        it('should retun all products', async()=>{
+        it('should return all products', async()=>{
             await ProductController.showProducts(req, res);
             expect(res.send).toHaveBeenCalled();
         });
-       /* it('should handle errors', async()=>{
+       it('should handle errors', async()=>{
             const errorMessage = 'error de busqueda de productos';
             jest.spyOn(Product, 'find').mockRejectedValue(new Error(errorMessage));
             await ProductController.showProducts(req, res);
-            //expect(res.status).toHaveBeenCalled(500);
-            expect(res.send).toEqual(errorMessage);
-        })*/
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.send).toHaveBeenCalledWith(errorMessage);
+        })
     })
+/*
+    describe('showProductById', () =>{
+        it('should return a product by id', async()=>{
+            req.params = {productId: '65645121566'}
+            await ProductController.showProductById(req, res);
+            expect(res.send).toHaveBeenCalled();
+        });
+        it('should handle errors', async ()=>{
+            req.params = {productId: ''};
+
+            const errorMessage = 'error de busqueda de producto por ID';
+            jest.spyOn(Product, 'findById').mockRejectedValue(new Error(errorMessage));
+
+            await ProductController.showProductById(req, res);
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.send).toHaveBeenCalledWith(errorMessage);
+        })
+    })*/
+
+
 
 
     /*
@@ -43,7 +64,21 @@ describe('ProductController', () => {
         })
     })*/
 
+    describe('updateProduct', () =>{
+        it('should update a product', async() =>{
+            req.params = {productId: '64643212154'};
+            req.body = product;
+
+            await ProductController.updateProduct(req, res);
+            expect(Product.findByIdAndUpdate).toHaveBeenCalledWith(req.params.productId, product,{ new: true } )
+            expect(res.redirect).toHaveBeenCalledWith('64643212154')
+
+        })
+    })
+
 });
+
+
 
 describe('printing products', () =>{
     it('lanza error si el producto es nulo o vacio', () =>{
