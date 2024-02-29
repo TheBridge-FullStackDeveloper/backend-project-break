@@ -1,7 +1,7 @@
-const { it } = require('node:test');
+
 const { ProductController, getProductOneCard, getProductCards } = require('../src/controllers/productController');
 const Product = require('../src/models/Product')
-/*
+
 jest.setTimeout(30000)
 /*
 describe('ProductController', () => {
