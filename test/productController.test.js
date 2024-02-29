@@ -18,7 +18,7 @@ describe('ProductController', () => {
         size: 'm',
         price: '25'
     }
-
+/*
     describe('showProducts', () =>{
         it('should return all products', async()=>{
             await ProductController.showProducts(req, res);
@@ -32,7 +32,7 @@ describe('ProductController', () => {
             expect(res.send).toHaveBeenCalledWith(errorMessage);
         })
     })
-/*
+
     describe('showProductById', () =>{
         it('should return a product by id', async()=>{
             req.params = {productId: '65645121566'}
@@ -50,9 +50,6 @@ describe('ProductController', () => {
             expect(res.send).toHaveBeenCalledWith(errorMessage);
         })
     })*/
-
-
-
 
     /*
     describe('createProduct', () =>{    
