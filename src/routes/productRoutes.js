@@ -28,6 +28,9 @@ router.get('/dashboard/:productId/edit', authMiddleware.checkSessionMiddleware, 
 //Actualización producto
 router.put('/dashboard/:productId', authMiddleware.checkSessionMiddleware, controller.updateProduct)
 
+//Actualización producto
+router.put('/dashboard/:productId', controller.updateProduct)
+
 //Eliminar un producto
 router.get('/dashboard/:productId/delete', authMiddleware.checkSessionMiddleware, controller.deleteProduct);
 
