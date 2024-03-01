@@ -421,3 +421,55 @@ getProductCards = (products, url) => {
     html += '</body></html>';
     return html;
 }
+
+
+
+//// CONTROLADORES PARA API
+
+// Obtener todos los productos API
+exports.showProductsAPI = async (req, res) => {
+    try {
+      const productos = await Product.find();
+      res.json(productos);
+    } catch (error) {
+      res.status(500).json({ error: 'Servidor no encontrado' });
+    }
+  };
+
+  // Crear un nuevo producto API
+  exports.createProductAPI = async (req, res) => {
+    try {
+      const nuevoProducto = new Product(req.body);
+      await nuevoProducto.save();
+      res.status(201).json({ mensaje: ' Nuevo producto añadido ' + nuevoProducto});
+    } catch (error) {
+      res.status(500).json({ error: ' Servidor no encontrado ' });
+    }
+  };
+  
+  // Actualizar un nuevo producto API
+  exports.updateProductAPI = async (req, res) => {
+    try {
+      const productoActualizado = await Product.findByIdAndUpdate(
+        req.params._id,
+        req.body,
+        { new: true }
+      );
+      res.json({mensaje: ' Producto actualizado correctamente ' + productoActualizado});
+    } catch (error) {
+      res.status(500).json({ error: ' Producto no encontrado por :id ' });
+    }
+  };
+
+  // Eliminar un producto API
+  exports.deleteProductAPI = async(req, res) => {
+    try {
+        const productoEliminado = await Product.findByIdAndDelete(req.params._id);
+        res.send({ message: ' Producto eliminado correctamente ' + productoEliminado });
+    } catch (error) {
+        console.error(error);
+        res
+            .status(500)
+            .send({ message: ' Producto no eliminado ' });
+    }
+}

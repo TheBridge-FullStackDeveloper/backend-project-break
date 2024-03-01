@@ -29,6 +29,7 @@
     "method-override": "3.0.0",
     "mongoose": "8.2.0",
     "nodemon": "3.1.0",
-    "npm": "10.4.0"
+    "npm": "10.4.0",
+    "swagger-ui-express": "^5.0.0"
   }
 }

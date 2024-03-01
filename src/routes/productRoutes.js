@@ -37,4 +37,25 @@ router.get('/dashboard/:productId/delete', authMiddleware.checkSessionMiddleware
 //Mostrar productos por categoría
 router.get('/categoria/:categoria', controller.showProductsByCategory);
 
+
+//// ROUTERS PARA API
+
+// Mostrar todos los productos API
+
+router.get('/api/products', controller.showProductsAPI);
+
+// Crear un nuevo producto API
+router.post("/api/dashboard", controller.createProductAPI);
+
+// Actualización producto API
+router.put('/api/dashboard/:_id', controller.updateProductAPI)
+
+// Eliminar producto API
+router.delete('/api/dashboard/:_id', controller.deleteProductAPI);
+
+
+
+
+
+
 module.exports = router;

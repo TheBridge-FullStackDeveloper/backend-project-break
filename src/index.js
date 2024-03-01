@@ -4,6 +4,9 @@ const bodyParser = require('body-parser');
 const path = require('path'); 
 require('dotenv').config();
 const session = require('express-session');
+const swaggerUI = require('swagger-ui-express')
+const docs = require('./docs/index')
+
 
 //Rutas
 const routes = require('./routes/productRoutes');
@@ -34,6 +37,8 @@ const publicPath = path.resolve(__dirname, '..', 'public');
 app.use(express.static(publicPath));
 
 dbConnection();
+
+app.use('/api-docs', swaggerUI.serve,swaggerUI.setup(docs))
 
 app.listen(PORT, () => {
     console.log(`Servidor en http://localhost:${PORT}`)
