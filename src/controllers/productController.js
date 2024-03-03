@@ -41,7 +41,7 @@ exports.showProductById = async (req, res) => {
                         <p>${product.descripcion}</p>
                         <p><b>Categoría: </b>${product.categoria}</p>
                         <p><b>Talla: </b>${product.talla}</p>
-                        <p><b>Precio: </b>${product.precio.toFixed(2)}.toFixed()€</p>
+                        <p><b>Precio: </b>${product.precio.toFixed(2)}€</p>
                         <a class="edit" href="/dashboard/${product._id}/edit">Modificar</a>
                         <a class="delete" href="/dashboard/${product._id}/delete">Eliminar</a>
                         <a class="home" href="/dashboard">Volver</a>
