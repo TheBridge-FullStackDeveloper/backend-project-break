@@ -22,7 +22,10 @@ app.use(session({
     secret: process.env.PALABRA_SECRETA || 'mi_secreto',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false } 
+    cookie: {
+        secure: false,
+        maxAge: 1000 * 60 * 60 * 24 * 30 // 30 días
+    }
 }));
 
 app.use(bodyParser.urlencoded({ extended: false }));

@@ -46,4 +46,6 @@ Además de lo mencionado, se ha usado la herramienta **Mongo de Atlas** como bas
 - **PUT /dashboard/:productId:** actualiza un producto a través de los valores introducidos en el formulario mostrado desde el endpoint */dashboard/:productId/edit*.
 - **DELETE /dashboard/:productId/delete**: elimina un producto.
 
+##### Notas:
 
+Para crear un nuevo producto o modificar un producto existente, las imágenes deben almacenarse en la carpeta '*/public/images*' y de esta forma, poder ser visualizadas correctamente desde la aplicación web. 
