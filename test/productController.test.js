@@ -3,7 +3,7 @@ const { ProductController, getProductOneCard, getProductCards } = require('../sr
 const Product = require('../src/models/Product')
 
 jest.setTimeout(30000)
-/*
+
 describe('ProductController', () => {
     const req ={};
     const res ={
@@ -18,8 +18,8 @@ describe('ProductController', () => {
         category: 'zapatos',
         size: 'm',
         price: '25'
-    }*/
-/*
+    }
+
     describe('showProducts', () =>{
         it('should return all products', async()=>{
             await ProductController.showProducts(req, res);
@@ -54,42 +54,7 @@ describe('ProductController', () => {
 
 
 
-
- 
-    describe('createProduct', () =>{    
-        it('should create a new product', async () =>{            
-            req.body = product;
-            await ProductController.createProduct(req, res);
-            expect(Product.create).toEqual(product);
-            expect(res.redirect).toEqual('/dashboard')
-        })
-    })
-
-/*
-describe('createProduct', () =>{    
-    it('should create a new product', async () =>{            
-        req.body = product;
-        await ProductController.createProduct(req, res);
-        expect(Product.create).toEqual(product);
-        expect(res.redirect).toEqual('/dashboard')
-    })
-})*/
-/*
-    describe('updateProduct', () =>{
-        it('should update a product', async() =>{
-            req.params = {productId: '64643212154'};
-            req.body = product;
-
-            await ProductController.updateProduct(req, res);
-            jest.spyOn(product, 'findByIdAndUpdate').mockResolvedValue(req.params.productId, product,{ new: true })
-            //expect(Product.findByIdAndUpdate).toHaveBeenCalledWith(req.params.productId, product,{ new: true } )
-            expect(res.redirect).toHaveBeenCalledWith('64643212154')
-
-        })
-    })
-   
-
-}); */
+}); 
 
 
 describe('printing products', () => {

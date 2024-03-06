@@ -1,5 +1,8 @@
 const Product = require('../models/Product')
-let token;
+const {signIn, singUp} = require('../controllers/authController');
+const {getAuth } = require("firebase/auth");
+const fireBaseApp = require('../config/firebase');
+const {generateToken} = require('../middlewares/authMiddleware');
 
 const htmlHead = `<!DOCTYPE html>
                 <html lang="es">
@@ -7,6 +10,8 @@ const htmlHead = `<!DOCTYPE html>
                     <meta charset="UTF-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <link rel="stylesheet" href="/styles.css">
+                    <script src="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.js"></script>
+                    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css" />       
                     <link rel="preconnect" href="https://fonts.googleapis.com">
                     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
                     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
@@ -16,7 +21,7 @@ const htmlHead = `<!DOCTYPE html>
 
 const htmlEnd = `</body></html>`
 
-function getNavBar() {
+function getNavBar(token) {
     let html = `<header>
     <nav class="nav">
         <a href="/products">Productos</a>
@@ -40,7 +45,7 @@ function getNavBar() {
     return html;
 }
 
-function getProductCards(products) {
+function getProductCards(products, token) {
     if (!products) {
         throw new Error('El producto esta vacio o nulo')
     }
@@ -61,7 +66,7 @@ function getProductCards(products) {
     return html + '<div>';
 }
 
-function getProductOneCard(product) {
+function getProductOneCard(product, token) {
     if (!product) {
         throw new Error('El producto esta vacio o nulo')
     }
@@ -89,13 +94,14 @@ function getProductOneCard(product) {
 const ProductController = {
     async showProducts(req, res) {
         try {
-            // controlar con dashboard                
+            // controlar con dashboard    
+            const token = req.session.token;            
             const products = await Product.find();
             if (!products) {
                 throw new Error('error de busqueda de productos')
             }
             const productCards = getProductCards(products, token);
-            const html = htmlHead + getNavBar() + productCards + htmlEnd
+            const html = htmlHead + getNavBar(token) + productCards + htmlEnd
             res.send(html);
         } catch (error) {
             console.error(error)
@@ -105,13 +111,14 @@ const ProductController = {
     async showProductById(req, res) {
         try {
             // controlar con dashboard
+            const token = req.session.token;
             const idProduct = req.params.productId;
 
             const product = await Product.findById(idProduct);
 
             const productCards = getProductOneCard(product, token)
 
-            const html = htmlHead + getNavBar() + productCards + htmlEnd
+            const html = htmlHead + getNavBar(token) + productCards + htmlEnd
             res.send(html);
 
 
@@ -122,6 +129,8 @@ const ProductController = {
     },
     async showNewProduct(req, res) {
         try {
+            const token = req.session.token;
+            if (token){
             const form = `
                 <h2> Crear nuevo producto</h2>
                 <div class="formContainer">
@@ -156,10 +165,10 @@ const ProductController = {
             
             `;
 
-            html = htmlHead + getNavBar() + form + htmlEnd
+            html = htmlHead + getNavBar(token) + form + htmlEnd
 
-            res.send(html)
-                ;
+            res.send(html);
+            }
 
         } catch (error) {
             console.error(error)
@@ -168,12 +177,12 @@ const ProductController = {
     },
     async showProductCategory(req, res) {
         try {
+            const token = req.session.token;
             const tipo = req.params;
             const productCategory = await Product.find({ category: tipo.category });
-            const productCards = getProductCards(productCategory);
-            const html = htmlHead + getNavBar() + productCards + htmlEnd
+            const productCards = getProductCards(productCategory, token);
+            const html = htmlHead + getNavBar(token) + productCards + htmlEnd
             res.send(html);
-
 
         } catch (error) {
             console.error(error)
@@ -182,16 +191,25 @@ const ProductController = {
 
     },
     async createProduct(req, res) {
-
-        const product = await Product.create({ ...req.body });
-        if (!product) {
-            throw new Error('Error al añadir un articulo')
+        
+        const token = req.session.token;
+        if(token){
+            const product = await Product.create({ ...req.body });
+            if (!product) {
+                throw new Error('Error al añadir un articulo')
+            }
+            res.redirect('/dashboard');
+        }else{
+            const html = htmlHead + getNavBar(token) + '<h2>Credenciales incorrectas</h2>'+ htmlEnd;
+            res.send(html);
         }
-        res.redirect('/dashboard');
+        
 
     },
     async showEditProduct(req, res) {
         try {
+            const token = req.session.token;
+            if (token){
             const idProduct = req.params.productId;
             const product = await Product.findById(idProduct);
 
@@ -248,9 +266,9 @@ const ProductController = {
             
             `;
 
-            html = htmlHead + getNavBar() + form + htmlEnd
+            html = htmlHead + getNavBar(token) + form + htmlEnd
             res.send(html)
-
+            }
 
 
         } catch (error) {
@@ -262,6 +280,8 @@ const ProductController = {
 
     async updateProduct(req, res) {
         try {
+            const token = req.session.token;
+            if(token){
             const idProduct = req.params.productId;
             const pBody = req.body
             const updateProduct = await Product.findByIdAndUpdate(
@@ -279,7 +299,7 @@ const ProductController = {
 
             res.redirect(`${idProduct}`)
 
-
+        }
 
         } catch (error) {
             console.error(error)
@@ -288,31 +308,106 @@ const ProductController = {
     },
     async deleteProduct(req, res) {
         try {
+            const token = req.session.token;
+            if(token){
             const idProduct = req.params.productId;
             const deletedProduct = await Product.findByIdAndDelete(idProduct)
             if (!deletedProduct) {
                 throw new Error('Producto no encontrado')
             }
             let message = `<h2>Producto eliminado correctamente</h2>`
-            html = htmlHead + getNavBar() + message + htmlEnd
+            html = htmlHead + getNavBar(token) + message + htmlEnd
             res.send(html)
+        }
 
         } catch (error) {
-            console.error(error)
             res.status(500).send('error de eliminacion articulo')
         }
     },
     async login(req, res) {
-        token = true;
-        res.redirect('/dashboard')
+        const form = `
+            <h2>Acceso usuario</h2>
+            <div class="formContainer">
+            <form class="formulario" action="/login" method="post">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+                <div class="botonesform">    
+                    <button  class="boton" type="submit">Ingresar</button>
+                    <a href="/register" class="boton">Registrarse</a>
+                </div>         
+            </form>
+                      
+            </div>
+        `
+
+        const html = htmlHead + getNavBar() + form + htmlEnd;
+
+        res.send(html);        
+        
+    },
+    async register(req, res) {
+        const form = `
+            <h2>Registro de usuario</h2>
+            <div class="formContainer">
+            <form class="formulario" action="/register" method="post">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>    
+                <button  class="boton" type="submit">Ingresar</button>                       
+            </form>                        
+            </div>
+        `
+        const html = htmlHead + getNavBar() + form + htmlEnd;
+        res.send(html);        
+        
+    },
+
+    async loginFirebase (req, res){
+        try {
+            const {email, password} = req.body; 
+            const auth = getAuth(fireBaseApp);   
+            const user = await signIn(auth, email, password);         
+            console.log(user.uid);
+            if(user){
+                const token = generateToken(user);
+                req.session.token = token;
+                res.redirect('/dashboard')
+            }            
+            
+        } catch (error) {
+            const htmlError = error
+            html = htmlHead + getNavBar()+ htmlError + htmlEnd
+            res.send(html)
+            
+        }
+    },
+    async singupFirebase (req, res){
+        try {
+            const {email, password} = req.body; 
+            const auth = getAuth(fireBaseApp);
+            const user = await singUp(auth, email, password)
+            if(user){
+                const token = generateToken(user);
+                req.session.token = token;
+                res.redirect('/dashboard')
+            } 
+                        
+        } catch (error) {
+            const htmlError = error
+            html = htmlHead + getNavBar()+ htmlError + htmlEnd
+            res.send(html)
+        }
+
     },
 
     async logout(req, res) {
-        token = false;
-        res.redirect('/products')
+        req.session.destroy();
+        res.redirect('/')
     }
 }
-
 
 module.exports = {
     ProductController,

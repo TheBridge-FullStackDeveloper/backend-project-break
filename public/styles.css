@@ -154,6 +154,7 @@ h2 {
 .nav {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     padding: 15px;
     background-color: #062ACD;
     gap: 15px;

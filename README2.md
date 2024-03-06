@@ -15,7 +15,7 @@ Esta sería la URL donde está alojada la tienda: URL:http********
 
 ## Funcionamiento de la tienda de ropa
 
-Una vez que se accede a la url de la web, lo primero que nos vamos ha econtrar es una web con una barra de navegación, la cual consta de las siguientes categorías:
+Una vez que se accede a la url de la web, lo primero que nos vamos ha encontrar es una web con una barra de navegación, la cual consta de las siguientes categorías:
 
 -[Productos](#Categoría-Productos)
 -[Camisetas](#Categoría-Camisetas)
